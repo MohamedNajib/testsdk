@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbars="horizontal">
+
+    <RelativeLayout
+        android:id="@+id/r"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/homebackground">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/card_background">
+
+            <TextView
+                android:id="@+id/txt1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/txt2"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="1dp"
+                android:gravity="right"
+                android:paddingRight="1dp"
+                android:paddingTop="10dp"
+                android:text="القانون رقم ١٣١ لسنة ١٩٨٤"
+                android:textColor="#84172E"
+                android:textDirection="rtl"
+                android:textSize="18sp" />
+
+            <android.support.v7.widget.AppCompatImageButton
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="40dp"
+                android:background="?attr/colorButtonNormal"
+                android:scaleType="fitXY" />
+
+            <TextView
+                android:id="@+id/txt2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/imageView"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="10dp"
+                android:gravity="right"
+                android:lines="4"
+                android:paddingBottom="2dp"
+                android:paddingRight="10dp"
+                android:paddingTop="10dp"
+                android:text="جمهوريه مصر العربيه القانون رقم ١٣١ لسنة ١٩٤٨ الوقاع المصريه - العدد ١٠٨ مكرر - في ٢٩ يوليه باصدار القانون المدني"
+                android:textDirection="rtl"
+                android:textSize="12sp"
+                tools:layout_editor_absoluteX="411dp"
+                tools:layout_editor_absoluteY="332dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/relativeLayout2"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp">
+
+            <ListView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="0dp"
+                android:background="@drawable/homebackground"
+                android:divider="#0000"
+                android:dividerHeight="6dp"
+                android:padding="0dp"
+                android:scrollbars="none|horizontal">
+
+            </ListView>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/card_background2">
+
+        <ImageView
+            android:id="@+id/backclik"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            app:srcCompat="@drawable/back" />
+
+        <TextView
+            android:id="@+id/txtTitel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="التشريعات"
+            android:textColor="#131313"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/homeclick"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/txtTitel"
+            app:srcCompat="@drawable/homa" />
+
+    </RelativeLayout>
+</RelativeLayout>

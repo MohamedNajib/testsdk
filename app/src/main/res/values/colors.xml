@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#353DA5</color>
+    <color name="colorPrimaryDark">#353DA5</color>
+    <color name="textColorPrimary">#000000</color>
+    <color name="windowBackground">#000000</color>
+    <color name="navigationBarColor">#000000</color>
+    <color name="colorAccent">#000000</color>
+
+    <color name="colorGray">#E0E0E0</color>
+    <color name="white">#FFFFFF</color>
+    <color name="itemBackground">#322196F3</color>
+
+    <color name="toolbarColor">#f8f8f8</color>
+    <color name="backGround">#eeeeeeff</color>
+
+    <color name="myPrimaryColor">#660033</color>
+
+    <color name="a">#ff000db6</color>
+    <color name="b">#00000000</color>
+    <color name="t">#222121</color>
+
+    <color name="blue">#FF005a9c</color>
+    <color name="lightBlue">#ff6691c4</color>
+    <color name="lighterBlue">#ffcdd8ec</color>
+    <color name="controlBackground">#ffffffff</color>
+</resources>

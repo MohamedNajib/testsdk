@@ -1,0 +1,125 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/kj"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/homebackground">
+
+
+        <SeekBar
+            android:id="@+id/seekBar1"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/relative"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="95dp"
+            android:max="30"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp" />
+
+        <TextView
+            android:id="@+id/txt1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/imageView3"
+            android:layout_alignEnd="@+id/imageView3"
+            android:layout_marginBottom="14dp"
+            android:layout_marginRight="10dp"
+            android:text="تكبير حجم الخط"
+            android:textColor="#343434" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/seekBar1"
+            android:layout_marginTop="28dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="تشغيل الصوت عند تقليب الصفحات"
+            android:textColor="#343434" />
+
+        <Switch
+            android:id="@+id/switch1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignStart="@+id/seekBar1"
+            android:layout_alignTop="@+id/textView2"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:shadowColor="@color/colorPrimary"
+            android:textColorHighlight="@color/colorPrimary"
+            android:textColorHint="@color/colorPrimary" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignBottom="@+id/seekBar1"
+            android:layout_alignTop="@+id/imageView3"
+            android:layout_toStartOf="@+id/switch1"
+            app:srcCompat="@drawable/textdecrease" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_above="@+id/textView2"
+            android:layout_toEndOf="@+id/seekBar1"
+            app:srcCompat="@drawable/textincrease" />
+
+        <RelativeLayout
+            android:id="@+id/relative"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/card_background2">
+
+            <TextView
+                android:id="@+id/txtTitel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:text="الإعدادات"
+
+                android:textColor="#131313"
+                android:textSize="15sp" />
+
+            <RelativeLayout
+                android:id="@+id/relative2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true">
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/backclik"
+                android:layout_width="35dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/txtTitel"
+                app:srcCompat="@drawable/back" />
+
+            <ImageView
+                android:id="@+id/homeclick"
+                android:layout_width="35dp"
+                android:layout_height="20dp"
+                android:layout_alignBottom="@+id/txtTitel"
+                android:layout_alignParentLeft="true"
+                app:srcCompat="@drawable/homa" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

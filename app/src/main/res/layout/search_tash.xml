@@ -1,0 +1,210 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/kj"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/homebackground">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+            <RelativeLayout
+                android:id="@+id/linner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="45dp"
+                android:orientation="horizontal"
+                android:paddingBottom="150dp">
+
+                <EditText
+                    android:id="@+id/txt_year_tash"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/lbl3"
+                    android:layout_marginTop="11dp"
+                    android:background="@drawable/rect_text_edit"
+                    android:gravity="center"
+                    android:hint="ادخل سنة التشريع المراد البحث عنه"
+                    android:inputType="number"
+                    android:textColor="#343434"
+                    android:textDirection="rtl" />
+
+                <TextView
+                    android:id="@+id/lbl2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/txt_name_tash"
+                    android:layout_marginTop="8dp"
+                    android:inputType="number"
+                    android:paddingRight="10dp"
+                    android:text="بحث برقم التشريع"
+                    android:textColor="#343434" />
+
+                <EditText
+                    android:id="@+id/txt_name_tash"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/lbl1"
+                    android:layout_marginTop="9dp"
+                    android:background="@drawable/rect_text_edit"
+                    android:gravity="center"
+                    android:hint="ادخل اسم التشريع المراد البحث عنه"
+                    android:textColor="#343434"
+                    android:textDirection="rtl" />
+
+                <TextView
+                    android:id="@+id/lbl1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="16dp"
+                    android:paddingRight="10dp"
+                    android:text="بحث باسم التشريع"
+                    android:textColor="#343434" />
+
+                <TextView
+                    android:id="@+id/lbl3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/txt_num_tash"
+                    android:layout_marginTop="10dp"
+                    android:paddingRight="10dp"
+                    android:text="بحث بسنة التشريع"
+                    android:textColor="#343434" />
+
+                <EditText
+                    android:id="@+id/txt_num_tash"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/lbl2"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/rect_text_edit"
+                    android:gravity="center"
+                    android:hint="ادخل رقم التشريع المراد البحث عنه"
+                    android:inputType="number"
+                    android:textColor="#343434"
+                    android:textDirection="rtl" />
+
+                <Button
+                    android:id="@+id/bt_search_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/txt_year_tash"
+                    android:layout_marginTop="13dp"
+                    android:background="@color/colorPrimary"
+                    android:onClick="SearchAction"
+                    android:text="بحث"
+                    android:textSize="24sp" />
+
+                <TextView
+                    android:id="@+id/lbl4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/bt_search_1"
+                    android:layout_marginTop="9dp"
+                    android:paddingRight="10dp"
+                    android:text="بحث داخل نصوص المواد"
+                    android:textColor="#343434" />
+
+                <EditText
+                    android:id="@+id/txt_word_tash"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/lbl4"
+                    android:layout_marginTop="22dp"
+                    android:background="@drawable/rect_text_edit"
+                    android:gravity="center"
+                    android:hint="ادخل موضوع البحث المراد البحث عنه"
+                    android:textColor="#343434"
+                    android:textDirection="rtl" />
+
+                <Button
+                    android:id="@+id/bt_search_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/txt_word_tash"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/colorPrimary"
+                    android:onClick="SearchAction_Mda"
+                    android:text="بحث"
+                    android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/clear"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignTop="@+id/lbl1"
+                    android:layout_marginLeft="17dp"
+                    app:srcCompat="@drawable/remove" />
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/card_background2">
+
+        <TextView
+            android:id="@+id/txtTitel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="بحث التشريعات"
+            android:textColor="#131313"
+            android:textSize="15sp" />
+
+        <RelativeLayout
+            android:id="@+id/relative2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/backclik"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignBottom="@+id/txtTitel"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            app:srcCompat="@drawable/back" />
+
+        <ImageView
+            android:id="@+id/homeclick"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/txtTitel"
+            app:srcCompat="@drawable/homa" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

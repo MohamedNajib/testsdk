@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ret"
+    android:layout_width="match_parent"
+    android:layout_height="75dp"
+    android:background="@drawable/card_background"
+    android:orientation="horizontal">
+
+    <!--  ListRow Left sied Thumbnail image -->
+    <ImageView
+        android:id="@+id/list_image"
+        android:layout_width="10dp"
+        android:layout_height="15dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="9dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginStart="9dp"
+        android:background="@drawable/more"
+        android:paddingBottom="2dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:scaleType="fitXY"></ImageView>
+
+    <!-- Title Of Song-->
+    <ImageView
+        android:id="@+id/list_image3"
+        android:layout_width="45dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:paddingBottom="2dp"
+        android:paddingRight="10dp"
+        android:scaleType="fitXY"></ImageView>
+
+    <TextView
+        android:id="@+id/item1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="40dp"
+        android:layout_toStartOf="@+id/list_image3"
+        android:gravity="right"
+        android:maxLines="1"
+        android:paddingBottom="20dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
+        android:text="القا0نون الدولي"
+        android:textAlignment="viewEnd"
+        android:textColor="#84172E"
+        android:textSize="18sp"
+        android:textStyle="normal|bold"
+        android:typeface="sans" />
+
+    <!-- Artist Name -->
+
+    <!-- Rightend Duration -->
+
+    <!-- Rightend Arrow -->
+
+</RelativeLayout>

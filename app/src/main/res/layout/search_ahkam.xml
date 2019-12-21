@@ -1,0 +1,258 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/kj"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/homebackground">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/linner"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="45dp"
+                android:orientation="horizontal"
+                android:paddingBottom="80dp">
+
+                <TextView
+                    android:id="@+id/lbl6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/txt_page"
+                    android:layout_marginTop="10dp"
+                    android:paddingRight="10dp"
+                    android:text="بحث بتاريخ الجلسة"
+                    android:textColor="#343434" />
+
+                <EditText
+                    android:id="@+id/txt_year_tash"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/lbl3"
+                    android:background="@drawable/rect_text_edit"
+                    android:gravity="center"
+                    android:hint="ادخل سنة المكتب الفني المراد البحث عنها"
+                    android:inputType="number"
+                    android:textColor="#343434"
+                    android:textDirection="rtl" />
+
+                <EditText
+                    android:id="@+id/txt_word_tash"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/lbl5"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rect_text_edit"
+                    android:gravity="center"
+                    android:hint="بحث داخل نص الحكم"
+                    android:textColor="#343434"
+                    android:textDirection="rtl" />
+
+                <TextView
+                    android:id="@+id/lbl2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/txt_name_tash"
+                    android:layout_marginTop="8dp"
+                    android:paddingRight="10dp"
+                    android:text="بحث بالسنة القضائية"
+                    android:textColor="#343434" />
+
+                <EditText
+                    android:id="@+id/txt_page"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/lbl4"
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/rect_text_edit"
+                    android:gravity="center"
+                    android:hint="ادخل رقم الصفحة المراد البحث عنها"
+                    android:textColor="#343434"
+                    android:inputType="number"
+                    android:textDirection="rtl" />
+
+                <EditText
+                    android:id="@+id/txt_name_tash"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/lbl1"
+                    android:layout_marginTop="9dp"
+                    android:background="@drawable/rect_text_edit"
+                    android:gravity="center"
+                    android:hint="ادخل رقم الطعن المراد البحث عنه"
+                    android:textColor="#343434"
+
+                    android:inputType="number"
+                    android:textDirection="rtl" />
+
+                <TextView
+                    android:id="@+id/lbl1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="16dp"
+                    android:paddingRight="10dp"
+                    android:text="رقم الطعن"
+                    android:textColor="#343434" />
+
+                <TextView
+                    android:id="@+id/lbl3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/txt_num_tash"
+                    android:layout_marginTop="11dp"
+                    android:paddingRight="10dp"
+                    android:text="سنة المكتب الفني"
+                    android:textColor="#343434"
+                    />
+
+                <TextView
+                    android:id="@+id/lbl4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@+id/txt_year_tash"
+                    android:layout_marginTop="12dp"
+                    android:paddingRight="10dp"
+                    android:text="رقم الصفحة"
+                    android:textColor="#343434" />
+
+                <EditText
+                    android:id="@+id/txt_num_tash"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/lbl2"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/rect_text_edit"
+                    android:gravity="center"
+                    android:hint="ادخل السنة القضائية المراد البحث عنها"
+                    android:textColor="#343434"
+                    android:textDirection="rtl"
+                    android:inputType="number"/>
+
+                <TextView
+                    android:id="@+id/lbl5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/date_to"
+                    android:layout_marginTop="9dp"
+                    android:paddingRight="10dp"
+                    android:text="موضوع البحث"
+                    android:textColor="#343434" />
+
+                <Button
+                    android:id="@+id/date_to"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/date_from"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/card_background2"
+                    android:onClick="setDate2"
+                    android:text="إلي تاريخ"
+                    android:textColor="@android:color/darker_gray" />
+
+                <Button
+                    android:id="@+id/date_from"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/lbl6"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/card_background2"
+                    android:onClick="setDate"
+                    android:text="من تاريخ"
+                    android:textColor="@android:color/darker_gray" />
+
+                <Button
+                    android:id="@+id/bt_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/txt_word_tash"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/colorPrimary"
+                    android:onClick="SearchAction"
+                    android:text="بحث"
+                    android:textSize="24sp" />
+
+                <ImageView
+                    android:id="@+id/clear"
+                    android:layout_width="20dp"
+                    android:layout_height="30dp"
+                    android:layout_above="@+id/txt_name_tash"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="18dp"
+                    app:srcCompat="@drawable/remove" />
+
+            </RelativeLayout>
+
+        </ScrollView>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/card_background2">
+
+        <TextView
+            android:id="@+id/txtTitel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:text="بحث في النقض"
+            android:textColor="#131313"
+            android:textSize="15sp" />
+
+        <RelativeLayout
+            android:id="@+id/relative2"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/backclik"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/txtTitel"
+            app:srcCompat="@drawable/back" />
+
+        <ImageView
+            android:id="@+id/homeclick"
+            android:layout_width="35dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/txtTitel"
+            app:srcCompat="@drawable/homa" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

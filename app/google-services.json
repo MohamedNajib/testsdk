@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "735553529545",
+    "firebase_url": "https://niabalaws-1562270374738.firebaseio.com",
+    "project_id": "niabalaws-1562270374738",
+    "storage_bucket": "niabalaws-1562270374738.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735553529545:android:cb67ed891388afdf",
+        "android_client_info": {
+          "package_name": "com.nibalaws.ebrahim.law"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735553529545-lvtc343hkssrn35dontjsnakrbth7brg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nibalaws.ebrahim.law",
+            "certificate_hash": "32b58617d0bdf883ca7e03a68bfc894c272d30aa"
+          }
+        },
+        {
+          "client_id": "735553529545-0racec7p7r8mb2o2ppnbkaeb8frqqb1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpWYYj6XwFOQKnAl1-EgfyH_nCW9pqeg8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735553529545-0racec7p7r8mb2o2ppnbkaeb8frqqb1i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

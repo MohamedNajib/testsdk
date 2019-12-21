@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.nibalaws.ebrahim.law">
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" /> <!-- support previous 4.4 KitKat devices -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.packageName.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+
+    <meta-data
+        android:name="com.google.firebase.messaging.default_notification_channel_id"
+        android:value="@string/default_notification_channel_id" />
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:debuggable="false"
+        android:hardwareAccelerated="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:launchMode="singleTask"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:screenOrientation="portrait"
+        android:supportsRtl="true"
+        android:testOnly="false"
+        android:theme="@style/MyMaterialTheme.Base"
+        tools:ignore="HardcodedDebugMode">
+        <activity android:name=".SearchAllActivity"></activity>
+        <activity android:name=".HomeActivity" />
+        <activity android:name=".SearchTashActivity" />
+        <activity android:name=".SearchAhkamActivity" />
+        <activity android:name=".GetNotificationsActivity" />
+        <activity android:name=".Splash_Screen">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".settings" />
+        <activity android:name=".homelist" />
+        <activity android:name=".contactus" />
+        <activity android:name=".ListFav" />
+        <activity android:name=".search.searchAll" />
+        <activity android:name=".Qiod.ListQioadpdf" />
+        <activity android:name=".webBr" />
+        <activity android:name=".ahkam.Nkd_Master" />
+        <activity android:name=".hitiat.Hitiat_Master" />
+        <activity android:name=".tashri3info" />
+        <activity android:name=".webview" />
+        <activity android:name=".search.searchAhkam" />
+        <activity android:name=".search.searchTash" />
+        <activity android:name=".Qiod.ListQioad" />
+        <activity android:name=".hitiat.ListHithiat" />
+        <activity android:name=".hitiat.textViewHithiat" />
+        <activity android:name=".Tash.Tashlist" />
+        <activity android:name=".Tash.Tashlist2" />
+        <activity android:name=".Tash.Tashlist3" />
+        <activity android:name=".ahkam.ListAhkambyYear" />
+        <activity android:name=".ahkam.ListAhkambytopics" />
+        <activity android:name=".ahkam.ListAhkam" />
+        <activity android:name=".Tash.Tashlistbyyear" />
+        <activity android:name=".Tash.Tashahkam" />
+        <activity android:name=".Tash.Tashmowad" />
+        <activity android:name=".Tash.Tashedit" />
+        <activity android:name=".Tash.Tashlai7a" />
+        <activity android:name=".Tash.Tashahkambymda" />
+        <activity android:name=".search.ListAhkamSearch" />
+        <activity android:name=".search.ListtashSearch" />
+        <activity android:name=".search.Tashmowadsearch" />
+        <activity android:name=".Tash.textViewMowad" />
+        <activity android:name=".ahkam.textViewahkam" />
+        <activity android:name=".Tanshet" />
+        <activity android:name=".notification.Show_massege" />
+        <activity android:name=".Qiod.textView" />
+        <activity android:name=".Ssssss"></activity>
+        <activity android:name=".DetailsSearchAll" />
+        <activity android:name=".DetailsSearchAhkamActivity" />
+
+        <service android:name=".notification.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".notification.MyFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
+
+</manifest>

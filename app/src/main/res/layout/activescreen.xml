@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relv"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash3x">
+
+    <ImageView
+        android:id="@+id/imageV"
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="32dp"
+        android:src="@drawable/logo3x"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/alert"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginRight="16dp"
+        android:text="للحصول علي كود التفعيل قم بارسال الرقم التعريفي الخاص بك في رسالة قصيرة الي الدعم الفني وسيصلك رسالة بكود التفعيل"
+        android:textColor="#343434"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageV" />
+
+
+    <TextView
+        android:id="@+id/tnashet_lbl1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:text="الرقم التعريفي الخاص بك"
+        android:textColor="#343434"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/alert" />
+
+    <TextView
+        android:id="@+id/codeApp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
+        android:textColor="#343434"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/ac"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tnashet_lbl1"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/ac"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:ems="10"
+        android:hint="كود التنشيط"
+        android:inputType="number"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/xx"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/xx"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/transparent"
+        android:text="01090606059"
+        android:textColor="#343434"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/btsend"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btsend"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/btn_"
+        android:onClick="sendSMS"
+        android:text="ارسال"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+    <!--    <RelativeLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_alignParentLeft="true"-->
+    <!--        android:layout_alignParentTop="true">-->
+
+    <!--        <EditText-->
+    <!--            android:id="@+id/ac"-->
+    <!--            android:layout_width="150dp"-->
+    <!--            android:layout_height="40dp"-->
+    <!--            android:layout_above="@+id/xx"-->
+    <!--            android:layout_centerHorizontal="true"-->
+    <!--            android:ems="10"-->
+    <!--            android:hint="كود التنشيط"-->
+    <!--            android:inputType="number"-->
+    <!--            android:textAlignment="center"-->
+    <!--            android:textColor="@color/black"-->
+    <!--            android:textSize="16sp"-->
+    <!--            android:textStyle="bold"-->
+    <!--            android:visibility="visible" />-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/btsend"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="40dp"-->
+    <!--            android:layout_alignParentBottom="true"-->
+    <!--            android:layout_centerHorizontal="true"-->
+    <!--            android:layout_margin="20dp"-->
+    <!--            android:layout_marginBottom="79dp"-->
+    <!--            android:textColor="@color/white"-->
+    <!--            android:background="@drawable/btn_"-->
+    <!--            android:onClick="sendSMS"-->
+    <!--            android:text="ارسال"-->
+    <!--            android:textAlignment="center"-->
+    <!--            android:textSize="24sp" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/xx"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_above="@+id/btsend"-->
+    <!--            android:layout_alignParentLeft="true"-->
+    <!--            android:layout_margin="10dp"-->
+    <!--            android:background="@android:color/transparent"-->
+    <!--            android:gravity="center"-->
+    <!--            android:text="01090606059"-->
+    <!--            android:textColor="#343434"-->
+    <!--            android:textSize="16sp"-->
+    <!--            app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--            app:layout_constraintRight_toRightOf="parent" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/alert"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_centerHorizontal="true"-->
+    <!--            android:layout_centerVertical="true"-->
+    <!--            android:text="للحصول علي كود التفعيل قم بارسال الرقم التعريفي الخاص بك في رسالة قصيرة الي الدعم الفني وسيصلك رسالة بكود التفعيل"-->
+    <!--            android:textColor="#343434"-->
+    <!--            app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--            app:layout_constraintRight_toRightOf="parent"-->
+    <!--            app:layout_constraintVertical_bias="0.475" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/codeApp"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_above="@+id/ac"-->
+    <!--            android:layout_centerHorizontal="true"-->
+    <!--            android:layout_margin="10dp"-->
+    <!--            android:background="@android:color/transparent"-->
+    <!--            android:gravity="center"-->
+    <!--            android:textColor="#343434"-->
+    <!--            android:textSize="16sp"-->
+    <!--            app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--            app:layout_constraintRight_toRightOf="parent"-->
+    <!--            app:layout_constraintTop_toBottomOf="@+id/tnashet_lbl1" />-->
+
+    <!--        <TextView-->
+    <!--            android:id="@+id/tnashet_lbl1"-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:layout_below="@+id/alert"-->
+    <!--            android:layout_centerHorizontal="true"-->
+    <!--            android:layout_margin="10dp"-->
+    <!--            android:text="الرقم التعريفي الخاص بك"-->
+    <!--            android:textColor="#343434"-->
+    <!--            app:layout_constraintRight_toRightOf="parent"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent" />-->
+    <!--    </RelativeLayout>-->
+
+
+</android.support.constraint.ConstraintLayout>
