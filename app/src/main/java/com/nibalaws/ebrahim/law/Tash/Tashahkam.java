@@ -20,19 +20,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
+import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
+import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
+import com.nibalaws.ebrahim.law.HomeActivity;
+import com.nibalaws.ebrahim.law.R;
+import com.nibalaws.ebrahim.law.ahkam.textViewahkam;
+import com.nibalaws.ebrahim.law.util.Util;
 
 import java.util.ArrayList;
 
-import com.nibalaws.ebrahim.law.HomeActivity;
-import com.nibalaws.ebrahim.law.R;
-import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
-import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
-import com.nibalaws.ebrahim.law.ahkam.textViewahkam;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class Tashahkam extends AppCompatActivity implements SearchView.OnQueryTextListener {
     public static int lstindx;
     public static String titlname;
+    @BindView(R.id.FavoriteTxtBack)
+    TextView FavoriteTxtBack;
     private SVProgressHUD mSVProgressHUD;
     int progress = 0;
     private ListView lv;
@@ -44,23 +49,26 @@ public class Tashahkam extends AppCompatActivity implements SearchView.OnQueryTe
     public static ArrayList<Master_Stract> fillterArray = new ArrayList<>();
     private Boolean ISsEARCHING = false;
 
-    DatabaseHelper db ;
+    DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.itemlist);
+        Util.setLocaleAr(this);
         setContentView(R.layout.layout_favorite);
+        ButterKnife.bind(this);
+        Util.setViewsTypeface(this, FavoriteTxtBack);
         sv = (SearchView) findViewById(R.id.search_view);
         lv = (ListView) findViewById(R.id.lstContact);
         mSVProgressHUD = new SVProgressHUD(this);
-        db =  new DatabaseHelper(this);
+        db = new DatabaseHelper(this);
         titelTxt = (TextView) findViewById(R.id.txtTitel);
         Typeface type = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
         titelTxt.setText(titlname);
         titelTxt.setTypeface(type);
 
-        adapter = new  CustomAdapter(getApplicationContext(), Master_Array);
+        adapter = new CustomAdapter(getApplicationContext(), Master_Array);
         sv.setOnQueryTextListener(this);
         lv.setAdapter(adapter);
         sv.setOnQueryTextListener(this);
@@ -69,16 +77,15 @@ public class Tashahkam extends AppCompatActivity implements SearchView.OnQueryTe
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 try {
-
-                    lstindx = position ;
-                new viewtxt().execute() ;
+                    lstindx = position;
+                    new viewtxt().execute();
 
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        ImageView homeclick= (ImageView) findViewById(R.id.homeclick);
+        ImageView homeclick = (ImageView) findViewById(R.id.homeclick);
         homeclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,7 +97,7 @@ public class Tashahkam extends AppCompatActivity implements SearchView.OnQueryTe
 
             }
         });
-        ImageView backclick= (ImageView) findViewById(R.id.backclik);
+        ImageView backclick = (ImageView) findViewById(R.id.backclik);
         backclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -99,7 +106,7 @@ public class Tashahkam extends AppCompatActivity implements SearchView.OnQueryTe
 
             }
         });
-        sv.setOnClickListener(  new View.OnClickListener() {
+        sv.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -117,6 +124,7 @@ public class Tashahkam extends AppCompatActivity implements SearchView.OnQueryTe
         overridePendingTransition(R.anim.hold, R.anim.svfade_out_center);
         super.onPause();
     }
+
     @Override
     public boolean onQueryTextSubmit(String s) {
         return false;
@@ -187,19 +195,19 @@ public class Tashahkam extends AppCompatActivity implements SearchView.OnQueryTe
             return view;
         }
 
-        CustomAdapter.ValueFilter valueFilter;
+        ValueFilter valueFilter;
 
         @Override
         public Filter getFilter() {
             if (valueFilter == null) {
-                valueFilter = new  CustomAdapter.ValueFilter();
+                valueFilter = new ValueFilter();
             }
             return valueFilter;
         }
 
 
         private class ValueFilter extends Filter {
-             @Override
+            @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
                 String Ser = constraint.toString();
@@ -245,8 +253,6 @@ public class Tashahkam extends AppCompatActivity implements SearchView.OnQueryTe
     }
 
 
-
-
     Intent intent;
 
     private class viewtxt extends AsyncTask<Void, Void, String> {
@@ -256,16 +262,13 @@ public class Tashahkam extends AppCompatActivity implements SearchView.OnQueryTe
 
             if (ISsEARCHING) {
                 textViewahkam.ArrayTXt = fillterArray;
-            }else{
+            } else {
                 textViewahkam.ArrayTXt = Master_Array;
             }
             textViewahkam.index = lstindx;
-            textViewahkam.bt_show_index =2 ;
-
-
+            textViewahkam.bt_show_index = 2;
 
             return null;
-
         }
 
         @Override
@@ -274,17 +277,18 @@ public class Tashahkam extends AppCompatActivity implements SearchView.OnQueryTe
             try {
                 mSVProgressHUD.dismiss();
                 super.onPostExecute(result);
-                 startActivity(intent);
+                startActivity(intent);
 
-            }catch (Exception e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();}
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
 
         }
+
         @Override
         protected void onPreExecute() {
             mSVProgressHUD.show();
         }
-
 
 
     }

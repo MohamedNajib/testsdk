@@ -21,23 +21,25 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-
-import java.util.ArrayList;
-
-import cn.refactor.lib.colordialog.PromptDialog;
-
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
 import com.nibalaws.ebrahim.law.DataBaseManger.MyAdapter;
 import com.nibalaws.ebrahim.law.DataBaseManger.Var;
+import com.nibalaws.ebrahim.law.HomeActivity;
 import com.nibalaws.ebrahim.law.R;
+import com.nibalaws.ebrahim.law.util.Util;
 import com.nibalaws.ebrahim.law.webview;
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import cn.refactor.lib.colordialog.PromptDialog;
 
 public class textViewahkam extends Activity implements GestureOverlayView.OnGesturePerformedListener {
     ArrayList<Prediction> prediction;
@@ -50,13 +52,11 @@ public class textViewahkam extends Activity implements GestureOverlayView.OnGest
     ImageButton b1;
     ImageButton b2;
     ImageButton b3;
-    RelativeLayout relativeLayout;
-    RelativeLayout relativeLayout2;
+
 
     Button bt;
     GestureOverlayView gesture;
     GestureLibrary lib;
-    ScrollView scrollView;
     ImageButton b4;
     public static ArrayList<Master_Stract> ArrayTXt = new ArrayList<>();
     TextView txt;
@@ -65,6 +65,8 @@ public class textViewahkam extends Activity implements GestureOverlayView.OnGest
     TextView titelTxt;
     DatabaseHelper db;
     public static String titlname;
+    @BindView(R.id.TV_back)
+    TextView TVBack;
 
     private GestureDetector gestureDetector;
     View.OnTouchListener gestureListener;
@@ -72,12 +74,13 @@ public class textViewahkam extends Activity implements GestureOverlayView.OnGest
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
         setContentView(R.layout.layout_law_articles);
-        txt = (TextView) findViewById(R.id.txt);
+        ButterKnife.bind(this);
+        Util.setViewsTypeface(this, TVBack);
+        txt = (TextView) findViewById(R.id.txtArt);
         txt2 = (TextView) findViewById(R.id.txtname);
-        scrollView = (ScrollView) findViewById(R.id.scrollView2);
-        relativeLayout = (RelativeLayout) findViewById(R.id.rel);
-        relativeLayout2 = (RelativeLayout) findViewById(R.id.ret);
+
         mSVProgressHUD = new SVProgressHUD(this);
         db = new DatabaseHelper(this);
         b1 = (ImageButton) findViewById(R.id.bt_next);
@@ -90,52 +93,45 @@ public class textViewahkam extends Activity implements GestureOverlayView.OnGest
 
         final MediaPlayer mp = MediaPlayer.create(this, R.raw.pageflip);
 
-        try {
-            txt.setTextIsSelectable(true);
-            titelTxt = (TextView) findViewById(R.id.txtTitel);
-            Typeface type = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
 
-            titelTxt.setText(ArrayTXt.get(index).getItem8().toString());
-            titelTxt.setTypeface(type);
+        txt.setTextIsSelectable(true);
+        titelTxt = (TextView) findViewById(R.id.txtTitel);
+        Typeface type = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
 
-            txt.setText(ArrayTXt.get(index).getItem2().toString());
-            txt2.setText(ArrayTXt.get(index).getItem1().toString());
+        titelTxt.setText(ArrayTXt.get(index).getItem8().toString());
+        titelTxt.setTypeface(type);
 
-            Typeface type2 = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
-            txt.setTypeface(type2);
-            Typeface type3 = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
-            txt2.setTypeface(type3);
-            Typeface type4 = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
+        txt.setText(ArrayTXt.get(index).getItem2().toString());
+        txt2.setText(ArrayTXt.get(index).getItem1().toString());
 
-            bt.setVisibility(View.VISIBLE);
-            bt.setText("عرض صورة الحكم");
+        Typeface type2 = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
+        txt.setTypeface(type2);
+        Typeface type3 = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
+        txt2.setTypeface(type3);
+        Typeface type4 = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
 
-            bt.setTypeface(type4);
+        bt.setVisibility(View.VISIBLE);
+        bt.setText("عرض صورة الحكم");
 
-
-            if (titelTxt.getText().toString() == "أحكام المحكمة الإقتصادية") {
-                bt.setVisibility(View.GONE);
-
-            }
+        bt.setTypeface(type4);
 
 
-            show_fav();
-            txt.setTextSize(TypedValue.COMPLEX_UNIT_SP, Var.FontSizeSettings);
-            gestureDetector = new GestureDetector(new MyGestureDetector());
-            gestureListener = new View.OnTouchListener() {
-                public boolean onTouch(View v, MotionEvent event) {
-                    return gestureDetector.onTouchEvent(event);
-                }
-            };
-
-            txt.setOnTouchListener(gestureListener);
-            scrollView.setOnTouchListener(gestureListener);
-            relativeLayout.setOnTouchListener(gestureListener);
-
-        } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        if (titelTxt.getText().toString() == "أحكام المحكمة الإقتصادية") {
+            bt.setVisibility(View.GONE);
 
         }
+
+
+        show_fav();
+        txt.setTextSize(TypedValue.COMPLEX_UNIT_SP, Var.FontSizeSettings);
+        gestureDetector = new GestureDetector(new MyGestureDetector());
+        gestureListener = new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        };
+
+        txt.setOnTouchListener(gestureListener);
 
 
         b1.setOnClickListener(new View.OnClickListener() {
@@ -308,6 +304,18 @@ public class textViewahkam extends Activity implements GestureOverlayView.OnGest
     private int flagList = 0;
     int pos;
 
+    @OnClick({R.id.homeclick, R.id.TV_back})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.homeclick:
+                Util.openActivity(this, HomeActivity.class);
+                break;
+            case R.id.TV_back:
+                finish();
+                break;
+        }
+    }
+
     class MyGestureDetector extends SimpleOnGestureListener {
         @Override
         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
@@ -352,9 +360,10 @@ public class textViewahkam extends Activity implements GestureOverlayView.OnGest
         protected String doInBackground(Void... params) {
 
             intent = new Intent(getApplicationContext(), webview.class);
-            webview.folder = ArrayTXt.get(index).getItem6().toString()  ;
-            webview.file = ArrayTXt.get(index).getItem7().toString() ;
+            webview.folder = ArrayTXt.get(index).getItem3().toString();
+            webview.file = ArrayTXt.get(index).getItem7().toString();
             webview.web_index = "1";
+            webview.Device_Token = Util.refreshedToken;
             return null;
 
         }

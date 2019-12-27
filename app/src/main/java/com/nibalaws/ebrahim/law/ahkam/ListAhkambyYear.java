@@ -24,13 +24,19 @@ import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
 import com.nibalaws.ebrahim.law.HomeActivity;
 import com.nibalaws.ebrahim.law.R;
+import com.nibalaws.ebrahim.law.util.Util;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class ListAhkambyYear extends AppCompatActivity implements SearchView.OnQueryTextListener {
     public static int lstindx;
     public static String titlname;
+    @BindView(R.id.FavoriteTxtBack)
+    TextView FavoriteTxtBack;
     private SVProgressHUD mSVProgressHUD;
     int progress = 0;
     private ListView lv;
@@ -42,17 +48,22 @@ public class ListAhkambyYear extends AppCompatActivity implements SearchView.OnQ
     public static ArrayList<Master_Stract> fillterArray = new ArrayList<>();
     private Boolean ISsEARCHING = false;
 
-    DatabaseHelper db ;
+    DatabaseHelper db;
 
     protected void onPause() {
         overridePendingTransition(R.anim.hold, R.anim.svfade_out_center);
         super.onPause();
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.itemlist);
+        Util.setLocaleAr(this);
         setContentView(R.layout.layout_favorite);
+        ButterKnife.bind(this);
+        Util.setViewsTypeface(this, FavoriteTxtBack);
+
         sv = (SearchView) findViewById(R.id.search_view);
         lv = (ListView) findViewById(R.id.lstContact);
         mSVProgressHUD = new SVProgressHUD(this);
@@ -62,7 +73,7 @@ public class ListAhkambyYear extends AppCompatActivity implements SearchView.OnQ
         titelTxt.setText(titlname);
         titelTxt.setTypeface(type);
 
-        adapter = new  CustomAdapter(getApplicationContext(), Master_Array);
+        adapter = new CustomAdapter(getApplicationContext(), Master_Array);
 
         sv.setOnQueryTextListener(this);
         lv.setAdapter(adapter);
@@ -73,15 +84,15 @@ public class ListAhkambyYear extends AppCompatActivity implements SearchView.OnQ
 
                 try {
 
-                    lstindx = position ;
-                        new ViewTxt().execute() ;
+                    lstindx = position;
+                    new ViewTxt().execute();
 
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        ImageView homeclick= (ImageView) findViewById(R.id.homeclick);
+        ImageView homeclick = (ImageView) findViewById(R.id.homeclick);
         homeclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +104,7 @@ public class ListAhkambyYear extends AppCompatActivity implements SearchView.OnQ
 
             }
         });
-        ImageView backclick= (ImageView) findViewById(R.id.backclik);
+        ImageView backclick = (ImageView) findViewById(R.id.backclik);
         backclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +113,7 @@ public class ListAhkambyYear extends AppCompatActivity implements SearchView.OnQ
 
             }
         });
-        sv.setOnClickListener(  new View.OnClickListener() {
+        sv.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -183,12 +194,12 @@ public class ListAhkambyYear extends AppCompatActivity implements SearchView.OnQ
             return view;
         }
 
-        CustomAdapter.ValueFilter valueFilter;
+        ValueFilter valueFilter;
 
         @Override
         public Filter getFilter() {
             if (valueFilter == null) {
-                valueFilter = new  CustomAdapter.ValueFilter();
+                valueFilter = new ValueFilter();
             }
             return valueFilter;
         }
@@ -242,9 +253,6 @@ public class ListAhkambyYear extends AppCompatActivity implements SearchView.OnQ
     }
 
 
-
-
-
     private class ViewTxt extends AsyncTask<Void, Void, String> {
         protected String doInBackground(Void... params) {
             try {
@@ -252,11 +260,11 @@ public class ListAhkambyYear extends AppCompatActivity implements SearchView.OnQ
 
                 if (ISsEARCHING) {
                     textViewahkam.ArrayTXt = fillterArray;
-                }else{
+                } else {
                     textViewahkam.ArrayTXt = Master_Array;
                 }
-                textViewahkam.bt_show_index =2 ;
-                textViewahkam.index = lstindx ;
+                textViewahkam.bt_show_index = 2;
+                textViewahkam.index = lstindx;
 
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -275,15 +283,16 @@ public class ListAhkambyYear extends AppCompatActivity implements SearchView.OnQ
                 textViewahkam.index = lstindx;
                 startActivity(intent);
 
-            }catch (Exception e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();}
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
 
         }
+
         @Override
         protected void onPreExecute() {
             mSVProgressHUD.show();
         }
-
 
 
     }

@@ -11,7 +11,6 @@ import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -32,20 +31,16 @@ import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
 import com.nibalaws.ebrahim.law.DataBaseManger.MyAdapter;
 import com.nibalaws.ebrahim.law.DataBaseManger.Var;
-import com.nibalaws.ebrahim.law.HomeActivity;
 import com.nibalaws.ebrahim.law.R;
 import com.nibalaws.ebrahim.law.Tash.Tashahkambymda;
-import com.nibalaws.ebrahim.law.Tash.textViewMowad;
-import com.nibalaws.ebrahim.law.rest.APIManager;
+import com.nibalaws.ebrahim.law.util.Util;
 import com.nibalaws.ebrahim.law.webview;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cn.refactor.lib.colordialog.PromptDialog;
-import io.reactivex.SingleObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 
 public class textView extends Activity implements GestureOverlayView.OnGesturePerformedListener {
@@ -59,13 +54,13 @@ public class textView extends Activity implements GestureOverlayView.OnGesturePe
     ImageButton b1;
     ImageButton b2;
     ImageButton b3;
-    RelativeLayout relativeLayout;
-    RelativeLayout relativeLayout2;
+//    RelativeLayout relativeLayout;
+//    RelativeLayout relativeLayout2;
 
     Button bt;
     GestureOverlayView gesture;
     GestureLibrary lib;
-    ScrollView scrollView;
+
     ImageButton b4;
     public static ArrayList<Master_Stract> ArrayTXt = new ArrayList<>();
     TextView txt;
@@ -74,6 +69,8 @@ public class textView extends Activity implements GestureOverlayView.OnGesturePe
     DatabaseHelper db;
     public static String titlname;
     TextView titelTxt;
+    @BindView(R.id.TV_back)
+    TextView TVBack;
     private GestureDetector gestureDetector;
     View.OnTouchListener gestureListener;
 
@@ -81,13 +78,16 @@ public class textView extends Activity implements GestureOverlayView.OnGesturePe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
 //        setContentView(R.layout.txt);
         setContentView(R.layout.layout_law_articles);
-        txt = (TextView) findViewById(R.id.txt);
+        ButterKnife.bind(this);
+        Util.setViewsTypeface(this, TVBack);
+        txt = (TextView) findViewById(R.id.txtArt);
         txt2 = (TextView) findViewById(R.id.txtname);
-        scrollView = (ScrollView) findViewById(R.id.scrollView2);
-        relativeLayout = (RelativeLayout) findViewById(R.id.rel);
-        relativeLayout2 = (RelativeLayout) findViewById(R.id.ret);
+        //scrollView = (ScrollView) findViewById(R.id.scrollView2);
+//        relativeLayout = (RelativeLayout) findViewById(R.id.rel);
+//        relativeLayout2 = (RelativeLayout) findViewById(R.id.ret);
         mSVProgressHUD = new SVProgressHUD(this);
         db = new DatabaseHelper(this);
         b1 = (ImageButton) findViewById(R.id.bt_next);
@@ -140,8 +140,8 @@ public class textView extends Activity implements GestureOverlayView.OnGesturePe
             };
 
             txt.setOnTouchListener(gestureListener);
-            scrollView.setOnTouchListener(gestureListener);
-            relativeLayout.setOnTouchListener(gestureListener);
+//            scrollView.setOnTouchListener(gestureListener);
+//            relativeLayout.setOnTouchListener(gestureListener);
 
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();

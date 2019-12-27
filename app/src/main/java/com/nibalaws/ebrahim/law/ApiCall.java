@@ -3,9 +3,12 @@ package com.nibalaws.ebrahim.law;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.nibalaws.ebrahim.law.rest.APIManager;
 import com.nibalaws.ebrahim.law.rest.apiModel.Search;
+import com.nibalaws.ebrahim.law.rest.apiModel.SearchResponse;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.SingleObserver;
@@ -15,35 +18,40 @@ import io.reactivex.schedulers.Schedulers;
 
 public class ApiCall {
 
+    public static List<SearchResponse> searchNibaList;
     public static void searchNibaCall(final Context context, String word, String searchType,
-                                  String typeIds, int page) {
+                                  String typeIds, int page, final SVProgressHUD mProgress) {
+        searchNibaList = new ArrayList<>();
         APIManager.getApis().SearchNiba(word, searchType, typeIds, page)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new SingleObserver<List<Search>>() {
+                .subscribe(new SingleObserver<List<SearchResponse>>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onSuccess(List<Search> searchnibaResponses) {
-                        for (int i = 0; i < searchnibaResponses.size(); i++) {
-                            ((HomeActivity)context).tv.append(searchnibaResponses.get(i).getInfo());
-                            ((HomeActivity)context).tv.append("\n");
-                        }
+                    public void onSuccess(List<SearchResponse> searchnibaResponses) {
+                        mProgress.dismiss();
+                        searchNibaList.addAll(searchnibaResponses);
+                        ((SearchnibaActivity)context).iniApitRecyclerView(searchNibaList);
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        mProgress.dismiss();
                         Toast.makeText(context, "Oops Error: \n"
                                 + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
+
+    public static List<Search> searchHithiatList;
     public static void searchHithiatCall(final Context context, String word, String Type_ids,
-                                         int page, String Search_type) {
+                                         int page, String Search_type, final SVProgressHUD mProgress) {
+        searchHithiatList = new ArrayList<>();
         APIManager.getApis().SearchHithiat(word, Type_ids, page, Search_type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -55,14 +63,14 @@ public class ApiCall {
 
                     @Override
                     public void onSuccess(List<Search> searchnibaResponses) {
-                        for (int i = 0; i < searchnibaResponses.size(); i++) {
-                            ((HomeActivity)context).tv.append(searchnibaResponses.get(i).getInfo());
-                            ((HomeActivity)context).tv.append("\n");
-                        }
+                        mProgress.dismiss();
+                        searchHithiatList.addAll(searchnibaResponses);
+                        ((SearchHithiatActivity)context).initApiRecyclerView(searchHithiatList);
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        mProgress.dismiss();
                         Toast.makeText(context, "Oops Error: \n"
                                 + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }
@@ -82,8 +90,8 @@ public class ApiCall {
                     @Override
                     public void onSuccess(List<Search> searchnibaResponses) {
                         for (int i = 0; i < searchnibaResponses.size(); i++) {
-                            ((HomeActivity)context).tv.append(searchnibaResponses.get(i).getInfo());
-                            ((HomeActivity)context).tv.append("\n");
+//                            ((HomeActivity)context).tv.append(searchnibaResponses.get(i).getInfo());
+//                            ((HomeActivity)context).tv.append("\n");
                         }
                     }
 
@@ -107,8 +115,8 @@ public class ApiCall {
 
                     @Override
                     public void onSuccess(Integer integer) {
-                        ((HomeActivity)context).tv.append(integer.toString());
-                        ((HomeActivity)context).tv.append("\n");
+//                        ((HomeActivity)context).tv.append(integer.toString());
+//                        ((HomeActivity)context).tv.append("\n");
 
                         Toast.makeText(context, integer.toString(), Toast.LENGTH_SHORT).show();
                     }
@@ -133,8 +141,8 @@ public class ApiCall {
 
                     @Override
                     public void onSuccess(Integer integer) {
-                        ((HomeActivity)context).tv.append(integer.toString());
-                        ((HomeActivity)context).tv.append("\n");
+//                        ((HomeActivity)context).tv.append(integer.toString());
+//                        ((HomeActivity)context).tv.append("\n");
 
                         Toast.makeText(context, integer.toString(), Toast.LENGTH_SHORT).show();
                     }
@@ -159,8 +167,6 @@ public class ApiCall {
 
                     @Override
                     public void onSuccess(String s) {
-//                        ((HomeActivity)context).tv.append(s);
-//                        ((HomeActivity)context).tv.append("\n");
                         Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
                     }
 

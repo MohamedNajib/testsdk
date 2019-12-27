@@ -294,6 +294,7 @@
 
 
             <Button
+                android:onClick="Sendaction"
                 android:id="@+id/bt_send"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"

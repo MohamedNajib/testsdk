@@ -25,6 +25,7 @@ import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
 import com.nibalaws.ebrahim.law.Qiod.textView;
 import com.nibalaws.ebrahim.law.R;
 import com.nibalaws.ebrahim.law.ahkam.ListAhkambyYear;
+import com.nibalaws.ebrahim.law.util.Util;
 
 import java.util.ArrayList;
 
@@ -44,7 +45,7 @@ public class fregment_one extends Fragment implements SearchView.OnQueryTextList
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        Util.setLocaleAr(getActivity());
         return inflater.inflate(R.layout.fregmentlist, container, false);
 
     }

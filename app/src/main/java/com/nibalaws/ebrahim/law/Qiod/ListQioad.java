@@ -24,13 +24,19 @@ import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
 import com.nibalaws.ebrahim.law.HomeActivity;
 import com.nibalaws.ebrahim.law.R;
+import com.nibalaws.ebrahim.law.util.Util;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class ListQioad extends AppCompatActivity implements SearchView.OnQueryTextListener {
     public static int lstindx;
     public static String titlname;
+    @BindView(R.id.FavoriteTxtBack)
+    TextView FavoriteTxtBack;
     private SVProgressHUD mSVProgressHUD;
     int progress = 0;
     private ListView lv;
@@ -42,30 +48,31 @@ public class ListQioad extends AppCompatActivity implements SearchView.OnQueryTe
     public static ArrayList<Master_Stract> fillterArray = new ArrayList<>();
     private Boolean ISsEARCHING = false;
 
-    DatabaseHelper db ;
-
-
+    DatabaseHelper db;
 
 
     public void GoBack(View view) {
-           finish();
+        finish();
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
 //        setContentView(R.layout.itemlist);
         setContentView(R.layout.layout_favorite);
+        ButterKnife.bind(this);
+        Util.setViewsTypeface(this, FavoriteTxtBack);
 
         sv = (SearchView) findViewById(R.id.search_view);
         lv = (ListView) findViewById(R.id.lstContact);
         mSVProgressHUD = new SVProgressHUD(this);
-        db =  new DatabaseHelper(this);
+        db = new DatabaseHelper(this);
         titelTxt = (TextView) findViewById(R.id.txtTitel);
         Typeface type = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
         titelTxt.setText(titlname);
         titelTxt.setTypeface(type);
-       adapter = new CustomAdapter(getApplicationContext(), Master_Array);
+        adapter = new CustomAdapter(getApplicationContext(), Master_Array);
         sv.setOnQueryTextListener(this);
         lv.setAdapter(adapter);
         sv.setOnQueryTextListener(this);
@@ -75,15 +82,15 @@ public class ListQioad extends AppCompatActivity implements SearchView.OnQueryTe
 
                 try {
 
-                    lstindx = position ;
-                    new ViewTxt().execute() ;
+                    lstindx = position;
+                    new ViewTxt().execute();
 
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        ImageView homeclick= (ImageView) findViewById(R.id.homeclick);
+        ImageView homeclick = (ImageView) findViewById(R.id.homeclick);
         homeclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,7 +102,7 @@ public class ListQioad extends AppCompatActivity implements SearchView.OnQueryTe
 
             }
         });
-        ImageView backclick= (ImageView) findViewById(R.id.backclik);
+        ImageView backclick = (ImageView) findViewById(R.id.backclik);
         backclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,7 +112,7 @@ public class ListQioad extends AppCompatActivity implements SearchView.OnQueryTe
             }
         });
 
-        sv.setOnClickListener(  new View.OnClickListener() {
+        sv.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -126,9 +133,6 @@ public class ListQioad extends AppCompatActivity implements SearchView.OnQueryTe
         adapter.getFilter().filter(s);
         return false;
     }
-
-
-
 
 
     public static ArrayList<Master_Stract> mStringFilterList = new ArrayList<>();
@@ -181,7 +185,6 @@ public class ListQioad extends AppCompatActivity implements SearchView.OnQueryTe
             item1_txt.setTypeface(type);
 
 
-
             return view;
         }
 
@@ -197,7 +200,7 @@ public class ListQioad extends AppCompatActivity implements SearchView.OnQueryTe
 
 
         private class ValueFilter extends Filter {
-             @Override
+            @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
                 String Ser = constraint.toString();
@@ -243,15 +246,13 @@ public class ListQioad extends AppCompatActivity implements SearchView.OnQueryTe
     }
 
 
-
-
-     private class ViewTxt extends AsyncTask<Void, Void, String> {
+    private class ViewTxt extends AsyncTask<Void, Void, String> {
         protected String doInBackground(Void... params) {
             try {
 
                 if (ISsEARCHING) {
                     textView.ArrayTXt = fillterArray;
-                }else{
+                } else {
                     textView.ArrayTXt = Master_Array;
                 }
 
@@ -262,28 +263,30 @@ public class ListQioad extends AppCompatActivity implements SearchView.OnQueryTe
 
         }
 
-         @Override
+        @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             try {
                 mSVProgressHUD.dismiss();
                 super.onPostExecute(result);
                 Intent intent = new Intent(ListQioad.this, textView.class);
-                 textView.index = lstindx;
-                 startActivity(intent);
+                textView.index = lstindx;
+                startActivity(intent);
 
-            }catch (Exception e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();}
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
 
         }
-         @Override
+
+        @Override
         protected void onPreExecute() {
             mSVProgressHUD.show();
         }
 
 
-
     }
+
     protected void onPause() {
         // Whenever this activity is paused (i.e. looses focus because another activity is started etc)
         // Override how this activity is animated out of view

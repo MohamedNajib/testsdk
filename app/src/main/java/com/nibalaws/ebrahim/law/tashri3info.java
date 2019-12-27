@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,20 +20,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-
-import java.util.ArrayList;
-
-import cn.refactor.lib.colordialog.PromptDialog;
-
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
 import com.nibalaws.ebrahim.law.Tash.Tashahkam;
 import com.nibalaws.ebrahim.law.Tash.Tashedit;
 import com.nibalaws.ebrahim.law.Tash.Tashlai7a;
 import com.nibalaws.ebrahim.law.Tash.Tashmowad;
+import com.nibalaws.ebrahim.law.util.Util;
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import cn.refactor.lib.colordialog.PromptDialog;
 
 
-public class tashri3info extends Activity {
+public class tashri3info extends AppCompatActivity {
     ListView list;
     TextView txt;
     TextView txt2;
@@ -40,6 +43,8 @@ public class tashri3info extends Activity {
     public static ArrayList<Master_Stract> xx = new ArrayList<>();
     TashinfoAdapter adapter2;
     DatabaseHelper db;
+    @BindView(R.id.EgyptTash_back_txt)
+    TextView EgyptTashBackTxt;
     private SVProgressHUD mSVProgressHUD;
     public static int has_lai7a;
     public static int has_edit;
@@ -48,8 +53,11 @@ public class tashri3info extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
 //        setContentView(R.layout.activity_tashri3info);
         setContentView(R.layout.layout_egyptian_tash);
+        ButterKnife.bind(this);
+        Util.setViewsTypeface(this, EgyptTashBackTxt);
 
         db = new DatabaseHelper(this);
 
@@ -81,7 +89,7 @@ public class tashri3info extends Activity {
 
         db = new DatabaseHelper(this);
         AdapterList adapter = new AdapterList(this, itemname, imgid);
-        ListView lstx = (ListView) findViewById(R.id.list);
+        ListView lstx = findViewById(R.id.list);
         Typeface typex = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
         titelTxt2.setTypeface(typex);
 
@@ -116,7 +124,6 @@ public class tashri3info extends Activity {
 
                 lstindx = position;
                 try {
-
                     new showTashOptions().execute();
 
 
@@ -176,7 +183,7 @@ public class tashri3info extends Activity {
                 select_has_val = has_lai7a;
                 if (select_has_val > 0) {
                     selectbtn = db.Gettashlai7a(adapter2.getItem(0).getItem1().toString());
-                    ;
+
                     Tashlai7a.Master_Array = selectbtn;
                 }
 
@@ -187,7 +194,7 @@ public class tashri3info extends Activity {
                 select_has_val = has_edit;
                 if (select_has_val > 0) {
                     selectbtn = db.Gettashedit(adapter2.getItem(0).getItem1().toString());
-                    ;
+
                     Tashedit.Master_Array = selectbtn;
                 }
 
@@ -198,7 +205,7 @@ public class tashri3info extends Activity {
                 select_has_val = has_ahkam;
                 if (select_has_val > 0) {
                     selectbtn = db.Gettashahkam(adapter2.getItem(0).getItem1().toString());
-                    ;
+
                     Tashahkam.Master_Array = selectbtn;
                 }
 

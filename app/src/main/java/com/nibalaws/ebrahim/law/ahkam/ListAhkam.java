@@ -20,18 +20,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-
-import java.util.ArrayList;
-
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
-
 import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
 import com.nibalaws.ebrahim.law.HomeActivity;
 import com.nibalaws.ebrahim.law.R;
+import com.nibalaws.ebrahim.law.util.Util;
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ListAhkam extends AppCompatActivity implements SearchView.OnQueryTextListener {
     public static int lstindx;
     public static String titlname;
+    @BindView(R.id.FavoriteTxtBack)
+    TextView FavoriteTxtBack;
     private SVProgressHUD mSVProgressHUD;
     int progress = 0;
     private ListView lv;
@@ -42,21 +46,26 @@ public class ListAhkam extends AppCompatActivity implements SearchView.OnQueryTe
     public static ArrayList<Master_Stract> Master_Array = new ArrayList<>();
     public static ArrayList<Master_Stract> fillterArray = new ArrayList<>();
     private Boolean ISsEARCHING = false;
-    DatabaseHelper db ;
+    DatabaseHelper db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
 //        setContentView(R.layout.itemlist);
         setContentView(R.layout.layout_favorite);
+        ButterKnife.bind(this);
+
+        Util.setViewsTypeface(this, FavoriteTxtBack);
         sv = (SearchView) findViewById(R.id.search_view);
         lv = (ListView) findViewById(R.id.lstContact);
         mSVProgressHUD = new SVProgressHUD(this);
-        db =  new DatabaseHelper(this);
+        db = new DatabaseHelper(this);
         titelTxt = (TextView) findViewById(R.id.txtTitel);
         Typeface type = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
         titelTxt.setText(titlname);
         titelTxt.setTypeface(type);
-        adapter = new  CustomAdapter(getApplicationContext(), Master_Array);
+        adapter = new CustomAdapter(getApplicationContext(), Master_Array);
         sv.setOnQueryTextListener(this);
         lv.setAdapter(adapter);
         sv.setOnQueryTextListener(this);
@@ -66,15 +75,15 @@ public class ListAhkam extends AppCompatActivity implements SearchView.OnQueryTe
 
                 try {
 
-                    lstindx = position ;
-                        new ViewTxt().execute() ;
+                    lstindx = position;
+                    new ViewTxt().execute();
 
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        ImageView homeclick= (ImageView) findViewById(R.id.homeclick);
+        ImageView homeclick = (ImageView) findViewById(R.id.homeclick);
         homeclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,7 +96,7 @@ public class ListAhkam extends AppCompatActivity implements SearchView.OnQueryTe
             }
         });
 
-        ImageView backclick= (ImageView) findViewById(R.id.backclik);
+        ImageView backclick = (ImageView) findViewById(R.id.backclik);
         backclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +105,7 @@ public class ListAhkam extends AppCompatActivity implements SearchView.OnQueryTe
 
             }
         });
-        sv.setOnClickListener(  new View.OnClickListener() {
+        sv.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -177,19 +186,19 @@ public class ListAhkam extends AppCompatActivity implements SearchView.OnQueryTe
             return view;
         }
 
-        CustomAdapter.ValueFilter valueFilter;
+        ValueFilter valueFilter;
 
         @Override
         public Filter getFilter() {
             if (valueFilter == null) {
-                valueFilter = new  CustomAdapter.ValueFilter();
+                valueFilter = new ValueFilter();
             }
             return valueFilter;
         }
 
 
         private class ValueFilter extends Filter {
-             @Override
+            @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
                 String Ser = constraint.toString();
@@ -235,7 +244,6 @@ public class ListAhkam extends AppCompatActivity implements SearchView.OnQueryTe
     }
 
 
-
     protected void onPause() {
         // Whenever this activity is paused (i.e. looses focus because another activity is started etc)
         // Override how this activity is animated out of view
@@ -252,12 +260,12 @@ public class ListAhkam extends AppCompatActivity implements SearchView.OnQueryTe
 
                 if (ISsEARCHING) {
                     textViewahkam.ArrayTXt = fillterArray;
-                }else{
+                } else {
                     textViewahkam.ArrayTXt = Master_Array;
                 }
 
-                textViewahkam.bt_show_index =2 ;
-                textViewahkam.index = lstindx ;
+                textViewahkam.bt_show_index = 2;
+                textViewahkam.index = lstindx;
 
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -276,15 +284,16 @@ public class ListAhkam extends AppCompatActivity implements SearchView.OnQueryTe
                 textViewahkam.index = lstindx;
                 startActivity(intent);
 
-            }catch (Exception e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();}
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
 
         }
+
         @Override
         protected void onPreExecute() {
             mSVProgressHUD.show();
         }
-
 
 
     }

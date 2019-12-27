@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
@@ -24,6 +25,7 @@ import com.nibalaws.ebrahim.law.HomeActivity;
 import com.nibalaws.ebrahim.law.R;
 import com.nibalaws.ebrahim.law.ahkam.fregment.fregment_one;
 import com.nibalaws.ebrahim.law.ahkam.fregment.fregment_two;
+import com.nibalaws.ebrahim.law.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +46,12 @@ public class Nkd_Master extends AppCompatActivity {
     Button button2;
     @BindView(R.id.Home_Fragment_ViewPager)
     ViewPager viewPager;
-    @BindView(R.id.tapsButton)
-    ConstraintLayout tapsButton;
+
+    @BindView(R.id.EgyptTash_back_txt)
+    TextView EgyptTashBackTxt;
+
+    private GradientDrawable drawable1;
+    private GradientDrawable drawable2;
 
     private Toolbar toolbar;
     //    private TabLayout tabLayout;
@@ -80,10 +86,19 @@ public class Nkd_Master extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.master_frgment);
+        Util.setLocaleAr(this);
         setContentView(R.layout.layout_civil_law);
         ButterKnife.bind(this);
+        Util.setViewsTypeface(this, EgyptTashBackTxt);
         db = new DatabaseHelper(this);
         MyAdapter.layitem = R.layout.row_item;
+
+        drawable1 = (GradientDrawable) button3.getBackground();
+        drawable2 = (GradientDrawable) button2.getBackground();
+
+
+        Util.setViewsTypeface(this, button2);
+        Util.setViewsTypeface(this, button3);
 
         TextView titelTxt = (TextView) findViewById(R.id.txtTitel);
         Typeface type = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
@@ -91,6 +106,18 @@ public class Nkd_Master extends AppCompatActivity {
         titelTxt.setTypeface(type);
 
         setupViewPager(viewPager);
+
+        /////
+        drawable1.setStroke(2, getResources().getColor(R.color.a));
+        drawable2.setStroke(2, getResources().getColor(R.color.a));
+
+        drawable1.setColor(getResources().getColor(R.color.a));
+        drawable2.setColor(getResources().getColor(R.color.b));
+
+        button3.setTextColor(getResources().getColor(R.color.white));
+        button2.setTextColor(getResources().getColor(R.color.t));
+        viewPager.setCurrentItem(1, true);
+        /////
 
 
 //        tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -133,6 +160,43 @@ public class Nkd_Master extends AppCompatActivity {
             }
         });
 
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Toast.makeText(Nkd_Master.this, "TTTT", Toast.LENGTH_SHORT).show();
+                if (position == 0){
+                    drawable1.setStroke(2, getResources().getColor(R.color.a));
+                    drawable2.setStroke(2, getResources().getColor(R.color.a));
+
+                    drawable1.setColor(getResources().getColor(R.color.b));
+                    drawable2.setColor(getResources().getColor(R.color.a));
+
+                    button2.setTextColor(getResources().getColor(R.color.white));
+                    button3.setTextColor(getResources().getColor(R.color.t));
+                }else if (position == 1){
+                    drawable1.setStroke(2, getResources().getColor(R.color.a));
+                    drawable2.setStroke(2, getResources().getColor(R.color.a));
+
+                    drawable1.setColor(getResources().getColor(R.color.a));
+                    drawable2.setColor(getResources().getColor(R.color.b));
+
+                    button3.setTextColor(getResources().getColor(R.color.white));
+                    button2.setTextColor(getResources().getColor(R.color.t));
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+
     }
 
 //    private void setupTabIcons() {
@@ -158,23 +222,23 @@ public class Nkd_Master extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFrag(new fregment_one());
-        tapsButton.setVisibility(View.GONE);
+        button2.setVisibility(View.GONE);
+        button3.setVisibility(View.GONE);
 
         if (titlname != "أحكام الدستورية العليا" && titlname != "محكمة القضاء الإداري"
                 && titlname != "المحكمة الإدارية العليا" && titlname != "فتاوي مجلس الدولة") {
             adapter.addFrag(new fregment_two());
-            tapsButton.setVisibility(View.VISIBLE);
+            button2.setVisibility(View.VISIBLE);
+            button3.setVisibility(View.VISIBLE);
         }
 
 
         viewPager.setAdapter(adapter);
+
     }
 
     @OnClick({R.id.button3, R.id.button2})
     public void onViewClicked(View view) {
-        GradientDrawable drawable1 = (GradientDrawable) button3.getBackground();
-        GradientDrawable drawable2 = (GradientDrawable) button2.getBackground();
-
         switch (view.getId()) {
             case R.id.button3:
                 viewPager.setCurrentItem(1, true);

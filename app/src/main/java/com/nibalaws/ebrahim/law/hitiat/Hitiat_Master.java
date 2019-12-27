@@ -17,13 +17,16 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
 import com.nibalaws.ebrahim.law.HomeActivity;
 import com.nibalaws.ebrahim.law.R;
+import com.nibalaws.ebrahim.law.ahkam.Nkd_Master;
 import com.nibalaws.ebrahim.law.hitiat.fregment2.fregment_one_H;
 import com.nibalaws.ebrahim.law.hitiat.fregment2.fregment_two_H;
+import com.nibalaws.ebrahim.law.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,13 +48,16 @@ public class Hitiat_Master extends AppCompatActivity {
     Button button2;
     @BindView(R.id.Home_Fragment_ViewPager)
     ViewPager viewPager;
-    @BindView(R.id.tapsButton)
-    ConstraintLayout tapsButton;
+    @BindView(R.id.EgyptTash_back_txt)
+    TextView EgyptTashBackTxt;
 
     private Toolbar toolbar;
     //private TabLayout tabLayout;
     private RelativeLayout relative;
     private RelativeLayout relative2;
+
+    private GradientDrawable drawable1;
+    private GradientDrawable drawable2;
 
     private int[] tabIcons = {
             R.drawable.ic_launcher_background,
@@ -81,21 +87,40 @@ public class Hitiat_Master extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
         //setContentView(R.layout.master_frgment);
         setContentView(R.layout.layout_civil_law);
         ButterKnife.bind(this);
+        Util.setViewsTypeface(this, EgyptTashBackTxt);
         db = new DatabaseHelper(this);
-
+        drawable1 = (GradientDrawable) button3.getBackground();
+        drawable2 = (GradientDrawable) button2.getBackground();
         TextView titelTxt = (TextView) findViewById(R.id.txtTitel);
         Typeface type = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
         titelTxt.setText(titlname);
         titelTxt.setTypeface(type);
+
+        Util.setViewsTypeface(this, button2);
+        Util.setViewsTypeface(this, button3);
 
 
         //viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
         relative = (RelativeLayout) findViewById(R.id.relative);
         relative2 = (RelativeLayout) findViewById(R.id.relative2);
+
+        //////
+        drawable1.setStroke(2, getResources().getColor(R.color.a));
+        drawable2.setStroke(2, getResources().getColor(R.color.a));
+
+        drawable1.setColor(getResources().getColor(R.color.a));
+        drawable2.setColor(getResources().getColor(R.color.b));
+
+        button3.setTextColor(getResources().getColor(R.color.white));
+        button2.setTextColor(getResources().getColor(R.color.t));
+        viewPager.setCurrentItem(1, true);
+
+        //////
 
 //        tabLayout = (TabLayout) findViewById(R.id.tabs);
 //        tabLayout.setupWithViewPager(viewPager);
@@ -135,6 +160,41 @@ public class Hitiat_Master extends AppCompatActivity {
 
         button2.setText("أحكام");
         button3.setText("قوانين");
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0){
+                    drawable1.setStroke(2, getResources().getColor(R.color.a));
+                    drawable2.setStroke(2, getResources().getColor(R.color.a));
+
+                    drawable1.setColor(getResources().getColor(R.color.b));
+                    drawable2.setColor(getResources().getColor(R.color.a));
+
+                    button2.setTextColor(getResources().getColor(R.color.white));
+                    button3.setTextColor(getResources().getColor(R.color.t));
+                }else if (position == 1){
+                    drawable1.setStroke(2, getResources().getColor(R.color.a));
+                    drawable2.setStroke(2, getResources().getColor(R.color.a));
+
+                    drawable1.setColor(getResources().getColor(R.color.a));
+                    drawable2.setColor(getResources().getColor(R.color.b));
+
+                    button3.setTextColor(getResources().getColor(R.color.white));
+                    button2.setTextColor(getResources().getColor(R.color.t));
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 //    private void setupTabIcons() {
@@ -166,9 +226,6 @@ public class Hitiat_Master extends AppCompatActivity {
 
     @OnClick({R.id.button3, R.id.button2})
     public void onViewClicked(View view) {
-        GradientDrawable drawable1 = (GradientDrawable) button3.getBackground();
-        GradientDrawable drawable2 = (GradientDrawable) button2.getBackground();
-
         switch (view.getId()) {
             case R.id.button3:
                 viewPager.setCurrentItem(1, true);

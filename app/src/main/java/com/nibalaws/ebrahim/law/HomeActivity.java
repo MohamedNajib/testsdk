@@ -10,6 +10,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.HorizontalScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,8 +41,8 @@ public class HomeActivity extends AppCompatActivity implements TextWatcher {
 
     @BindView(R.id.autoCompleteTextView)
     AutoCompleteTextView autoCompleteTextView;
-    @BindView(R.id.tv)
-    TextView tv;
+    //    @BindView(R.id.tv)
+//    TextView tv;
     @BindView(R.id.t1)
     TextView t1;
     @BindView(R.id.t2)
@@ -92,6 +93,14 @@ public class HomeActivity extends AppCompatActivity implements TextWatcher {
     TextView tv16;
     @BindView(R.id.homeTitle)
     TextView homeTitle;
+    @BindView(R.id.HorizontalScrollView1)
+    HorizontalScrollView HorizontalScrollView1;
+    @BindView(R.id.HorizontalScrollView2)
+    HorizontalScrollView HorizontalScrollView2;
+    @BindView(R.id.HorizontalScrollView3)
+    HorizontalScrollView HorizontalScrollView3;
+    @BindView(R.id.HorizontalScrollView4)
+    HorizontalScrollView HorizontalScrollView4;
 
     private List<String> textautoCompList;
     private ArrayAdapter<String> adapter;
@@ -100,11 +109,12 @@ public class HomeActivity extends AppCompatActivity implements TextWatcher {
     private Intent intent;
     private SVProgressHUD mSVProgressHUD;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
         Util.setLocaleAr(this);
+        setContentView(R.layout.activity_home);
         ButterKnife.bind(this);
 
         textautoCompList = new ArrayList<>();
@@ -112,22 +122,6 @@ public class HomeActivity extends AppCompatActivity implements TextWatcher {
         autoCompleteTextView.addTextChangedListener(this);
         db = new DatabaseHelper(this);
         mSVProgressHUD = new SVProgressHUD(this);
-
-//        Locale locale = new Locale("ar");
-//        Locale.setDefault(locale);
-//        Configuration config = new Configuration();
-//        config.locale = locale;
-//        getBaseContext().getResources().updateConfiguration(config,
-//                getBaseContext().getResources().getDisplayMetrics());
-
-        //ApiCall.searchNibaCall(this, "قتل", "1", "1,2,3", 1);
-        //ApiCall.searchHithiatCall(this, "قتل", "1,2,3,4,5,7,8,6,10,9,20", 1, "1");
-        //ApiCall.getDataBaseLastUpdateCall(this, "1,2,3,4");
-        ///ApiCall.chkForActiveCodeCall(this, "1111");
-        //ApiCall.chkForActiveMobCall(this, "01002853998");
-        //ApiCall.addDeviceCall(this, "1", "2222222xxxxx", "1");
-
-        //transLateTextApi("قتل");
     }
 
     private void setViewsTypeface() {
@@ -213,9 +207,7 @@ public class HomeActivity extends AppCompatActivity implements TextWatcher {
             Intent intent = new Intent(HomeActivity.this, SearchAllActivity.class);
             intent.putExtra("search_text", autoCompleteTextView.getText().toString());
             startActivity(intent);
-        }
-
-        else Toast.makeText(this, "No Data Search", Toast.LENGTH_SHORT).show();
+        } else Toast.makeText(this, "No Data Search", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -346,13 +338,13 @@ public class HomeActivity extends AppCompatActivity implements TextWatcher {
 
     private class viewtashinfo extends AsyncTask<Void, Void, String> {
         protected String doInBackground(Void... params) {
-            try {
+//            try {
                 intent = new Intent(getApplicationContext(), tashri3info.class);
                 tashri3info.listIndex = db.gettashinfo(tashId);
 
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+//            } catch (Exception e) {
+//                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
             return null;
 
         }

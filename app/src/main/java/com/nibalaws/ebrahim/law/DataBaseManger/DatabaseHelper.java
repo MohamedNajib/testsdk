@@ -49,11 +49,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-
-
-
-
     public void updateDataBase() throws IOException {
         if (mNeedUpdate) {
             File dbFile = new File(DB_PATH + DBNAME);
@@ -136,110 +131,83 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-    public String   arbicencodic(String Word) {
-        String str = Word ;
-       String[]  startcut = {"الا","الأ","الأ","الأ", "ال","ا","أ","إ","آ","والا","والأ","والأ","والإ","وال","وا", "وأ","وإ","وآ"} ;
-        String[] Endcut  = { "ه","ة", "ء","ي", "ا","أ", "إ"};
-         for (String x : startcut)
-      {
-       if (str.startsWith(x)) {
-                str = str.substring(x.length()) ;
+    public String arbicencodic(String Word) {
+        String str = Word;
+        String[] startcut = {"الا", "الأ", "الأ", "الأ", "ال", "ا", "أ", "إ", "آ", "والا", "والأ", "والأ", "والإ", "وال", "وا", "وأ", "وإ", "وآ"};
+        String[] Endcut = {"ه", "ة", "ء", "ي", "ا", "أ", "إ"};
+        for (String x : startcut) {
+            if (str.startsWith(x)) {
+                str = str.substring(x.length());
             }
         }
         for (String x : Endcut) {
             if (str.endsWith(x)) {
-                 str = str.substring(0, str.length() - 1);
-           }
+                str = str.substring(0, str.length() - 1);
+            }
         }
-        return str ;
-     }
+        return str;
+    }
 
 
+    public String Converten(String Num) {
+        Locale locale = new Locale("ar");
+        String[] strings = Num.split(",\\s*");
+        NumberFormat fmt = null;
+        fmt = NumberFormat.getInstance(locale);
+
+        try {
+            StringBuilder sb = new StringBuilder();
+            for (String s : strings) {
+                Number n = fmt.parse(s);
+                if (sb.length() != 0) {
+                    sb.append(",");
+                }
+                sb.append(n);
+            }
+
+            return sb.toString();
+        } catch (ParseException ex) {
+        }
+        return "";
+    }
 
 
-
-
-
-
-
-
-      public String Converten(String Num) {
-          Locale locale = new Locale("ar");
-         String[] strings = Num.split(",\\s*");
-          NumberFormat fmt = null;
-               fmt = NumberFormat.getInstance(locale);
-
-          try {
-             StringBuilder sb = new StringBuilder();
-             for (String s : strings) {
-                 Number n = fmt.parse(s);
-                 if (sb.length() != 0) {
-                     sb.append(",");
-                 }
-                 sb.append(n);
-             }
-
-            return sb.toString() ;
-          } catch (ParseException ex) {
-          }
-         return "" ;
-     }
-
-
-
-    public  boolean isNumeric(String str)
-    {
-        try
-        {
+    public boolean isNumeric(String str) {
+        try {
             double d = Double.parseDouble(str);
-        }
-        catch(NumberFormatException nfe)
-        {
+        } catch (NumberFormatException nfe) {
             return false;
         }
         return true;
     }
 
-    public String   arbicencodicSub(String str) {
+    public String arbicencodicSub(String str) {
 
 
-
-        String txtxxx = "" ;
-         String[] strArr = str.split("\\s+");
-
-
-     for (String item : strArr) {
-         if (item.length() > 2) {
-
-             txtxxx = txtxxx + (arbicencodic(item)) + " ";
-         }
-     }
-          return txtxxx;
-
-   }
+        String txtxxx = "";
+        String[] strArr = str.split("\\s+");
 
 
+        for (String item : strArr) {
+            if (item.length() > 2) {
 
+                txtxxx = txtxxx + (arbicencodic(item)) + " ";
+            }
+        }
+        return txtxxx;
 
-
-
-
-
-
-
-
+    }
 
 
     public ArrayList pdf_dawry() {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
 
-        String sqlCheack = "" ;
+        String sqlCheack = "";
 
         if (Var.Active) {
             sqlCheack = "select * from pdf_dawry ";
-        }else{
+        } else {
             sqlCheack = "select * from pdf_dawry limit 5";
 
         }
@@ -249,10 +217,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (!res.isAfterLast()) {
             String item1 = res.getString(res.getColumnIndex("name"));
             String item2 = res.getString(res.getColumnIndex("path"));
-            arrayList.add(new Master_Stract(item1,item2,"","","","","",item1));
+            arrayList.add(new Master_Stract(item1, item2, "", "", "", "", "", item1));
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -263,7 +231,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -274,17 +242,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //   Ios FUNC getQiods
 
-    public ArrayList getQiods(String  T_id) {
+    public ArrayList getQiods(String T_id) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
 
-        String sqlCheack = "" ;
+        String sqlCheack = "";
 
         if (Var.Active) {
             sqlCheack = "SELECT     Niba_books.ID, Niba_books_Details.title, Niba_books_Details.details, Niba_books.Name\n" +
                     "FROM         Niba_books INNER JOIN\n" +
                     "                      Niba_books_Details ON Niba_books.ID = Niba_books_Details.Type_id where Type_id =\" + T_id + \" ";
-        }else{
+        } else {
             sqlCheack = "SELECT     Niba_books.ID, Niba_books_Details.title, Niba_books_Details.details, Niba_books.Name\n" +
                     "FROM         Niba_books INNER JOIN\n" +
                     "                      Niba_books_Details ON Niba_books.ID = Niba_books_Details.Type_id where Type_id =" + T_id + " limit 5";
@@ -298,10 +266,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String item1 = res.getString(res.getColumnIndex("title"));
             String item2 = res.getString(res.getColumnIndex("details"));
             String name = res.getString(res.getColumnIndex("Name"));
-            arrayList.add(new Master_Stract(item1,item2,"","","","","",name));
+            arrayList.add(new Master_Stract(item1, item2, "", "", "", "", "", name));
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -312,7 +280,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -322,13 +290,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //   Ios FUNC getNaqdTopics
-    public ArrayList GetahkamTopic( String  Type_id) {
+    public ArrayList GetahkamTopic(String Type_id) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
-         if (Var.Active) {
+        String sqlCheack = "";
+        if (Var.Active) {
             sqlCheack = "select * from Ahkam_Topics where T_id like '" + Type_id + "'";
-        }else{
+        } else {
             sqlCheack = "select * from Ahkam_Topics where T_id like '" + Type_id + "' limit 5";
         }
         Cursor res = mDatabase.rawQuery(sqlCheack, null);
@@ -338,10 +306,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String hkm_type = res.getString(res.getColumnIndex("id"));
             String T_id = res.getString(res.getColumnIndex("T_id"));
 
-            arrayList.add(new Master_Stract(Topic_name,hkm_type,"","","","","",T_id));
+            arrayList.add(new Master_Stract(Topic_name, hkm_type, "", "", "", "", "", T_id));
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -352,7 +320,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -360,15 +328,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return arrayList;
 
     }
+
     //   Ios FUNC getNaqdYears
-    public ArrayList getahkamyear( String  Type_id) {
+    public ArrayList getahkamyear(String Type_id) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
 
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "select * from Ahkam_type_years where Type_id like '" + Type_id + "'";
-        }else{
+        } else {
             sqlCheack = "select * from Ahkam_type_years where Type_id like '" + Type_id + "' limit 5 ";
         }
 
@@ -377,10 +346,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (!res.isAfterLast()) {
             String Topic_year = res.getString(res.getColumnIndex("H_Year"));
             String hkm_type = res.getString(res.getColumnIndex("Type_id"));
-            arrayList.add(new Master_Stract(Topic_year,hkm_type,"","","","","",Topic_year));
+            arrayList.add(new Master_Stract(Topic_year, hkm_type, "", "", "", "", "", Topic_year));
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -391,7 +360,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -399,13 +368,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return arrayList;
 
     }
+
     //   Ios FUNC getNaqdAhkam
-    public ArrayList getahkamBytopic( String  Topic_id,String  T_id) {
+    public ArrayList getahkamBytopic(String Topic_id, String T_id) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
 
 
-        String sqlCheack = "" ;
+        String sqlCheack = "";
 
         if (Var.Active) {
 
@@ -414,15 +384,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "                      Ahkam_Topics_Master ON Ahkam_Topics.id = Ahkam_Topics_Master.Topic_id INNER JOIN\n" +
                     "                      Ahkam_master ON Ahkam_Topics_Master.ahkam_id = Ahkam_master.ID_ INNER JOIN\n" +
                     "                      Ahkam_types ON Ahkam_master.MASTER_ID = Ahkam_types.ID\n" +
-                    "WHERE     (Ahkam_Topics_Master.Topic_id = " + Topic_id +  " and Ahkam_Topics.T_id = " + T_id +  " )\n";
-        }else{
+                    "WHERE     (Ahkam_Topics_Master.Topic_id = " + Topic_id + " and Ahkam_Topics.T_id = " + T_id + " )\n";
+        } else {
 
             sqlCheack = "SELECT  ' الطعن رقم '  ||  Ahkam_master.C_No  ||  ' سنة ' ||    Ahkam_master.C_Year ||  ' بتاريخ  '  ||   Ahkam_master.date_galsa as titel   ,Ahkam_types.Name as Master_name,hkm_mbda  as details,master_id,path,Text as Topic_name\n" +
                     "FROM         Ahkam_Topics INNER JOIN\n" +
                     "                      Ahkam_Topics_Master ON Ahkam_Topics.id = Ahkam_Topics_Master.Topic_id INNER JOIN\n" +
                     "                      Ahkam_master ON Ahkam_Topics_Master.ahkam_id = Ahkam_master.ID_ INNER JOIN\n" +
                     "                      Ahkam_types ON Ahkam_master.MASTER_ID = Ahkam_types.ID\n" +
-                    "WHERE     (Ahkam_Topics_Master.Topic_id = " + Topic_id +  " and Ahkam_Topics.T_id = " + T_id +  " )\n";
+                    "WHERE     (Ahkam_Topics_Master.Topic_id = " + Topic_id + " and Ahkam_Topics.T_id = " + T_id + " )\n";
 
         }
 
@@ -437,10 +407,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String path = res.getString(res.getColumnIndex("path"));
             String name_ = res.getString(res.getColumnIndex("Master_name"));
 
-             arrayList.add(new Master_Stract(titel,details,Topic_name_,"","",MASTER,path,name_));
+            arrayList.add(new Master_Stract(titel, details, Topic_name_, "", "", MASTER, path, name_));
             res.moveToNext();
         }
-         try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -451,7 +421,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -459,27 +429,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return arrayList;
 
     }
-     //   Ios FUNC getNaqdAhkam
-    public ArrayList getahkamByyear( String  MASTER_ID , String hkm_Master_year) {
+
+    //   Ios FUNC getNaqdAhkam
+    public ArrayList getahkamByyear(String MASTER_ID, String hkm_Master_year) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
 
-        String sqlCheack = "" ;
+        String sqlCheack = "";
 
         if (Var.Active) {
             sqlCheack = "SELECT  ' الطعن رقم '  ||  Ahkam_master.C_No  ||  ' سنة ' ||    Ahkam_master.C_Year ||  ' بتاريخ  '  ||   Ahkam_master.date_galsa as titel   ,Ahkam_types.Name as Master_name,hkm_mbda  as details,MASTER_ID,path,C_D_Year\n" +
                     "                    FROM        \n" +
                     "                                          Ahkam_master INNER JOIN  \n" +
                     "                                          Ahkam_types ON Ahkam_master.MASTER_ID = Ahkam_types.ID \n" +
-                    "                    WHERE     C_D_Year = " +  hkm_Master_year + " and master_id = " + MASTER_ID + "";
-        }else{
+                    "                    WHERE     C_D_Year = " + hkm_Master_year + " and master_id = " + MASTER_ID + "";
+        } else {
             sqlCheack = "SELECT  ' الطعن رقم '  ||  Ahkam_master.C_No  ||  ' سنة ' ||    Ahkam_master.C_Year ||  ' بتاريخ  '  ||   Ahkam_master.date_galsa as titel   ,Ahkam_types.Name as Master_name,hkm_mbda  as details,MASTER_ID,path,C_D_Year\n" +
                     "                    FROM        \n" +
                     "                                          Ahkam_master INNER JOIN  \n" +
                     "                                          Ahkam_types ON Ahkam_master.MASTER_ID = Ahkam_types.ID \n" +
-                    "                    WHERE     C_D_Year = " +  hkm_Master_year + " and master_id = " + MASTER_ID + " limit 5";
+                    "                    WHERE     C_D_Year = " + hkm_Master_year + " and master_id = " + MASTER_ID + " limit 5";
         }
-
 
 
         Cursor res = mDatabase.rawQuery(sqlCheack, null);
@@ -492,10 +462,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String path = res.getString(res.getColumnIndex("path"));
             String name_ = res.getString(res.getColumnIndex("Master_name"));
 
-            arrayList.add(new Master_Stract(titel ,details,hkm_Master_year_,"","",MASTER,path,name_));
+            arrayList.add(new Master_Stract(titel, details, hkm_Master_year_, "", "", MASTER, path, name_));
             res.moveToNext();
         }
-         try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -506,7 +476,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -516,18 +486,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     //   Ios FUNC getHaisiats
-    public ArrayList Gethitiat(String  Type_id) {
+    public ArrayList Gethitiat(String Type_id) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
 
-        String sqlCheack = "" ;
+        String sqlCheack = "";
 
         if (Var.Active) {
             sqlCheack = "SELECT    Hithiat_books.name as Master_name,Hithiat_books_Topics.Name AS  Topic_name ,Hithiat_books_Topics.ID,Type_id\n" +
                     "FROM        Hithiat_books_Topics INNER JOIN\n" +
                     "                     Hithiat_books ON Hithiat_books_Topics.Type_id =  Hithiat_books.id\n" +
                     "WHERE     (Hithiat_books_Topics.Type_id = " + Type_id + ")";
-        }else{
+        } else {
             sqlCheack = "SELECT    Hithiat_books.name as Master_name,Hithiat_books_Topics.Name AS  Topic_name ,Hithiat_books_Topics.ID,Type_id\n" +
                     "FROM        Hithiat_books_Topics INNER JOIN\n" +
                     "                     Hithiat_books ON Hithiat_books_Topics.Type_id =  Hithiat_books.id\n" +
@@ -539,10 +509,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String type_id_ = res.getString(res.getColumnIndex("Type_id"));
             String topic_name = res.getString(res.getColumnIndex("Topic_name"));
             String id = res.getString(res.getColumnIndex("ID"));
-            arrayList.add(new Master_Stract(topic_name,type_id_,id,null,null,"","",topic_name));
+            arrayList.add(new Master_Stract(topic_name, type_id_, id, null, null, "", "", topic_name));
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -553,7 +523,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -561,26 +531,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return arrayList;
 
     }
+
     //   Ios FUNC  getHithiatLaw
-    public ArrayList Gethithitlaw( String  type_id , String topic_id) {
+    public ArrayList Gethithitlaw(String type_id, String topic_id) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
 
 
-
-        String sqlCheack = "" ;
-         if (Var.Active) {
+        String sqlCheack = "";
+        if (Var.Active) {
             sqlCheack = "SELECT     Hithiat_books_Topics.Type_id, Hithiat_books_Topics.Name, Hithiat_books.name AS type_name, Hithiat_books_Laws.Title AS titel, Hithiat_books_Laws.notes AS details\n" +
                     "FROM         Hithiat_books_Laws INNER JOIN\n" +
                     "                      Hithiat_books_Topics ON Hithiat_books_Laws.Topic_id = Hithiat_books_Topics.ID INNER JOIN\n" +
                     "                      Hithiat_books ON Hithiat_books_Topics.Type_id = Hithiat_books.id\n" +
                     "WHERE     (Hithiat_books_Laws.Topic_id = " + topic_id + ") AND (Hithiat_books_Topics.Type_id = " + type_id + ")";
-        }else{
-             sqlCheack = "SELECT     Hithiat_books_Topics.Type_id, Hithiat_books_Topics.Name, Hithiat_books.name AS type_name, Hithiat_books_Laws.Title AS titel, Hithiat_books_Laws.notes AS details\n" +
-                     "FROM         Hithiat_books_Laws INNER JOIN\n" +
-                     "                      Hithiat_books_Topics ON Hithiat_books_Laws.Topic_id = Hithiat_books_Topics.ID INNER JOIN\n" +
-                     "                      Hithiat_books ON Hithiat_books_Topics.Type_id = Hithiat_books.id\n" +
-                     "WHERE     (Hithiat_books_Laws.Topic_id = " + topic_id + ") AND (Hithiat_books_Topics.Type_id = " + type_id + ") limit 5";
+        } else {
+            sqlCheack = "SELECT     Hithiat_books_Topics.Type_id, Hithiat_books_Topics.Name, Hithiat_books.name AS type_name, Hithiat_books_Laws.Title AS titel, Hithiat_books_Laws.notes AS details\n" +
+                    "FROM         Hithiat_books_Laws INNER JOIN\n" +
+                    "                      Hithiat_books_Topics ON Hithiat_books_Laws.Topic_id = Hithiat_books_Topics.ID INNER JOIN\n" +
+                    "                      Hithiat_books ON Hithiat_books_Topics.Type_id = Hithiat_books.id\n" +
+                    "WHERE     (Hithiat_books_Laws.Topic_id = " + topic_id + ") AND (Hithiat_books_Topics.Type_id = " + type_id + ") limit 5";
 
         }
         Cursor res = mDatabase.rawQuery(sqlCheack, null);
@@ -593,12 +563,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String Master = res.getString(res.getColumnIndex("Type_id"));
             String name_ = res.getString(res.getColumnIndex("type_name"));
 
-            arrayList.add(new Master_Stract(titel,details,tash_name,mda_number,null,"","",name_));
+            arrayList.add(new Master_Stract(titel, details, tash_name, mda_number, null, "", "", name_));
 
 
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -609,7 +579,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -617,21 +587,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return arrayList;
 
     }
+
     //   Ios FUNC getHithiatAhkam
-    public ArrayList Gethithitnkd( String  type_id , String topic_id) {
+    public ArrayList Gethithitnkd(String type_id, String topic_id) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "SELECT     Hithiat_books.name, Hithiat_books_Ahkam.*\n" +
                     "FROM         Hithiat_books INNER JOIN\n" +
                     "                      Hithiat_books_Ahkam ON Hithiat_books.id = Hithiat_books_Ahkam.type_id\n" +
-                    "WHERE     (Hithiat_books_Ahkam.type_id = " + type_id + ") AND (Hithiat_books_Ahkam.Topic_id = " +  topic_id + ")";
-        }else{
+                    "WHERE     (Hithiat_books_Ahkam.type_id = " + type_id + ") AND (Hithiat_books_Ahkam.Topic_id = " + topic_id + ")";
+        } else {
             sqlCheack = "SELECT     Hithiat_books.name, Hithiat_books_Ahkam.*\n" +
                     "FROM         Hithiat_books INNER JOIN\n" +
                     "                      Hithiat_books_Ahkam ON Hithiat_books.id = Hithiat_books_Ahkam.type_id\n" +
-                    "WHERE     (Hithiat_books_Ahkam.type_id = " + type_id + ") AND (Hithiat_books_Ahkam.Topic_id = " +  topic_id + ") limit 5";
+                    "WHERE     (Hithiat_books_Ahkam.type_id = " + type_id + ") AND (Hithiat_books_Ahkam.Topic_id = " + topic_id + ") limit 5";
 
         }
         Cursor res = mDatabase.rawQuery(sqlCheack, null);
@@ -642,13 +613,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String Master = res.getString(res.getColumnIndex("type_id"));
             String name_ = res.getString(res.getColumnIndex("name"));
 
-            arrayList.add(new Master_Stract(titel,details,null,null,null,"","",name_));
+            arrayList.add(new Master_Stract(titel, details, null, null, null, "", "", name_));
 
 
             res.moveToNext();
 
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -659,7 +630,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -670,17 +641,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     //   Ios FUNC getTashreaatDetailsByTashID
-    public ArrayList gettashinfo( String  Tash_id) {
+    public ArrayList gettashinfo(String Tash_id) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
 
-        String sqlCheack = "" ;
+        String sqlCheack = "";
 
         if (Var.Active) {
-            sqlCheack = "SELECT     Tash_id, Type_ID, pic_path, T_name, T_Type || ' رقم ' || T_No ||   ' لسنة '  ||  T_Year  as T_Short_name,has_lai7a,has_edit,has_ahkam FROM Tash_master WHERE  Tash_id like '" + Tash_id  + "'";
+            sqlCheack = "SELECT     Tash_id, Type_ID, pic_path, T_name, T_Type || ' رقم ' || T_No ||   ' لسنة '  ||  T_Year  as T_Short_name,has_lai7a,has_edit,has_ahkam FROM Tash_master WHERE  Tash_id like '" + Tash_id + "'";
 
-        }else{
-            sqlCheack = "SELECT     Tash_id, Type_ID, pic_path, T_name, T_Type || ' رقم ' || T_No ||   ' لسنة '  ||  T_Year  as T_Short_name,has_lai7a,has_edit,has_ahkam  FROM Tash_master WHERE  Tash_id like '" + Tash_id  + "' limit 5";
+        } else {
+            sqlCheack = "SELECT     Tash_id, Type_ID, pic_path, T_name, T_Type || ' رقم ' || T_No ||   ' لسنة '  ||  T_Year  as T_Short_name,has_lai7a,has_edit,has_ahkam  FROM Tash_master WHERE  Tash_id like '" + Tash_id + "' limit 5";
 
         }
 
@@ -697,10 +668,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String has_edit = res.getString(res.getColumnIndex("has_edit"));
             String has_ahkam = res.getString(res.getColumnIndex("has_ahkam"));
 
-            arrayList.add(new Master_Stract(Tash_id_,Type_ID,pic_path,T_name,T_Short_name,has_lai7a,has_edit,has_ahkam));
+            arrayList.add(new Master_Stract(Tash_id_, Type_ID, pic_path, T_name, T_Short_name, has_lai7a, has_edit, has_ahkam));
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -711,7 +682,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -719,17 +690,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return arrayList;
 
     }
+
     //    Ios FUNC getAllMawadByTashID
-    public ArrayList Gettashmowad( String  Tash_id) {
+    public ArrayList Gettashmowad(String Tash_id) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "SELECT     Tash_mowad.has_ahkam, Tash_mowad.mda_id, Tash_mowad.titel, Tash_mowad.details, Tash_mowad.edit_txt, Tash_master.T_name\n" +
                     "FROM         Tash_master INNER JOIN\n" +
                     "                      Tash_mowad ON Tash_master.Tash_id = Tash_mowad.Tash_id\n" +
                     "WHERE     (Tash_master.Tash_id = " + Tash_id + ") order by number";
-        }else{
+        } else {
             sqlCheack = "SELECT     Tash_mowad.has_ahkam, Tash_mowad.mda_id, Tash_mowad.titel, Tash_mowad.details, Tash_mowad.edit_txt, Tash_master.T_name\n" +
                     "FROM         Tash_master INNER JOIN\n" +
                     "                      Tash_mowad ON Tash_master.Tash_id = Tash_mowad.Tash_id\n" +
@@ -742,13 +714,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String titel = res.getString(res.getColumnIndex("titel"));
             String number = "";
             String edit_txt = res.getString(res.getColumnIndex("edit_txt"));
-            String details =  res.getString(res.getColumnIndex("details"))  + "\n" + " "  + "\n"  + edit_txt;
+            String details = res.getString(res.getColumnIndex("details")) + "\n" + " " + "\n" + edit_txt;
             String mda_id = res.getString(res.getColumnIndex("mda_id"));
             String T_name = res.getString(res.getColumnIndex("T_name"));
-            arrayList.add(new Master_Stract(titel,details,edit_txt,number,mda_id,"","",T_name));
+            arrayList.add(new Master_Stract(titel, details, edit_txt, number, mda_id, "", "", T_name));
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -759,7 +731,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -767,18 +739,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return arrayList;
 
     }
+
     //    Ios FUNC getAllLawaahByTashID
-    public ArrayList Gettashlai7a( String  Tash_id) {
+    public ArrayList Gettashlai7a(String Tash_id) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
 
             sqlCheack = "SELECT       Tash_lai7a.Tash_id_Lai7a as Tash_id, T_Type || ' رقم ' || T_No ||   ' لسنة '  ||  T_Year  as T_Short_name\n" +
                     "FROM         Tash_master INNER JOIN\n" +
                     "                      Tash_lai7a ON Tash_master.Tash_id = Tash_lai7a.Tash_id_Lai7a\n" +
                     "WHERE     (Tash_lai7a.Tash_id  like '" + Tash_id + "')  group by Tash_lai7a.Tash_id_Lai7a order by T_D_Year desc , T_No asc";
-        }else{
+        } else {
             sqlCheack = "SELECT       Tash_lai7a.Tash_id_Lai7a as Tash_id, T_Type || ' رقم ' || T_No ||   ' لسنة '  ||  T_Year  as T_Short_name\n" +
                     "FROM         Tash_master INNER JOIN\n" +
                     "                      Tash_lai7a ON Tash_master.Tash_id = Tash_lai7a.Tash_id_Lai7a\n" +
@@ -792,10 +765,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String T_Short_name = res.getString(res.getColumnIndex("T_Short_name"));
 
 
-            arrayList.add(new Master_Stract( Tash_id_,T_Short_name,"","" ,"","","",""));
+            arrayList.add(new Master_Stract(Tash_id_, T_Short_name, "", "", "", "", "", ""));
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -806,7 +779,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -814,21 +787,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return arrayList;
 
     }
+
     //    Ios FUNC getAllEditsByTashID
-    public ArrayList Gettashedit( String  Tash_id) {
+    public ArrayList Gettashedit(String Tash_id) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "SELECT       Tash_edit.Tash_id_edit as Tash_id, T_Type || ' رقم ' || T_No ||   ' لسنة '  ||  T_Year  as T_Short_name\n" +
                     "FROM         Tash_master INNER JOIN\n" +
                     "                      Tash_edit ON Tash_master.Tash_id = Tash_edit.Tash_id_edit\n" +
-                    "WHERE     (Tash_edit.Tash_id = " + Tash_id + ")  group by Tash_edit.Tash_id_edit order by T_D_Year desc , T_No asc";
-        }else{
+                    "WHERE     (Tash_edit.Tash_id = " + Tash_id + ")  group by Tash_edit.Tash_id_edit order by T_D_Year desc , desc asc";
+        } else {
             sqlCheack = "SELECT       Tash_edit.Tash_id_edit as Tash_id, T_Type || ' رقم ' || T_No ||   ' لسنة '  ||  T_Year  as T_Short_name\n" +
                     "FROM         Tash_master INNER JOIN\n" +
                     "                      Tash_edit ON Tash_master.Tash_id = Tash_edit.Tash_id_edit\n" +
-                    "WHERE     (Tash_edit.Tash_id = " + Tash_id + ")  group by Tash_edit.Tash_id_edit order by T_D_Year desc , T_No asc limit 5";
+                    "WHERE     (Tash_edit.Tash_id = " + Tash_id + ")  group by Tash_edit.Tash_id_edit order by T_D_Year desc , desc asc limit 5";
 
         }
         Cursor res = mDatabase.rawQuery(sqlCheack, null);
@@ -838,27 +812,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String T_Short_name = res.getString(res.getColumnIndex("T_Short_name"));
 
 
-            arrayList.add(new Master_Stract( Tash_id_,T_Short_name,"","" ,"","","",""));
+            arrayList.add(new Master_Stract(Tash_id_, T_Short_name, "", "", "", "", "", ""));
             res.moveToNext();
         }
-        try  {
+        try {
             res.close();
             closeDatabase();
         } catch (Exception e) {
             Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
             res.close();
             closeDatabase();
-        }finally{
+        } finally {
             res.close();
             closeDatabase();
         }
         return arrayList;
     }
+
     //    Ios FUNC getAllAhkamByTashID
-    public ArrayList Gettashahkam( String  Tash_id) {
+    public ArrayList Gettashahkam(String Tash_id) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
 
             sqlCheack = "SELECT     ' الطعن رقم '  ||  Ahkam_master.C_No  ||  ' سنة ' ||    Ahkam_master.C_Year ||  ' بتاريخ  '  ||   Ahkam_master.date_galsa as hkm_title , Ahkam_master.hkm_mbda as hkm_details, Ahkam_master.path, \n" +
@@ -867,7 +842,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "                      Ahkam_master ON Tash_Ahkam.hkm_id = Ahkam_master.ID_ INNER JOIN\n" +
                     "                      Ahkam_types ON Ahkam_master.MASTER_ID = Ahkam_types.ID\n" +
                     "WHERE     (Tash_Ahkam.Tash_id = " + Tash_id + ") limit 50 ";
-        }else{
+        } else {
             sqlCheack = "SELECT     ' الطعن رقم '  ||  Ahkam_master.C_No  ||  ' سنة ' ||    Ahkam_master.C_Year ||  ' بتاريخ  '  ||   Ahkam_master.date_galsa as hkm_title , Ahkam_master.hkm_mbda as hkm_details, Ahkam_master.path, \n" +
                     "                      Ahkam_master.MASTER_ID, Ahkam_types.Name as Hkm_type\n" +
                     "FROM         Tash_Ahkam INNER JOIN\n" +
@@ -876,37 +851,40 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "WHERE     (Tash_Ahkam.Tash_id = " + Tash_id + ") limit 5 ";
         }
 
-         Cursor res = mDatabase.rawQuery(sqlCheack, null);
+        Cursor res = mDatabase.rawQuery(sqlCheack, null);
         res.moveToFirst();
         while (!res.isAfterLast()) {
             String hkm_title = res.getString(res.getColumnIndex("hkm_title"));
             String hkm_details = res.getString(res.getColumnIndex("hkm_details"));
             String path = res.getString(res.getColumnIndex("path"));
             String Hkm_type = res.getString(res.getColumnIndex("Hkm_type"));
-            arrayList.add(new Master_Stract(hkm_title,hkm_details,null,null,null,null,path,Hkm_type));
+            String master_id = res.getString(res.getColumnIndex("MASTER_ID"));
+
+            arrayList.add(new Master_Stract(hkm_title, hkm_details, master_id, null, null, null, path, Hkm_type));
             res.moveToNext();
         }
-        try  {
+        try {
             res.close();
             closeDatabase();
         } catch (Exception e) {
             Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
             res.close();
             closeDatabase();
-        }finally{
+        } finally {
             res.close();
             closeDatabase();
         }
         return arrayList;
     }
-//    Ios FUNC getImportantashreaatSuccess
+
+    //    Ios FUNC getImportantashreaatSuccess
     public ArrayList GetimportTash() {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "select * from Tash_Import_List";
-        }else{
+        } else {
             sqlCheack = "select * from Tash_Import_List  limit 5";
 
         }
@@ -914,19 +892,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         res.moveToFirst();
         while (!res.isAfterLast()) {
             String Tash_id = res.getString(res.getColumnIndex("Tash_id"));
-            String import_tash_name = res.getString(res.getColumnIndex("import_tash_name"));
+            String import_tash_name = res.getString(res.getColumnIndex("Import_tash_name"));
 
-            arrayList.add(new Master_Stract(Tash_id,import_tash_name,"","","","","",""));
+            arrayList.add(new Master_Stract(Tash_id, import_tash_name, "", "", "", "", "", ""));
             res.moveToNext();
         }
-        try  {
+        try {
             res.close();
             closeDatabase();
         } catch (Exception e) {
             Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
             res.close();
             closeDatabase();
-        }finally{
+        } finally {
             res.close();
             closeDatabase();
         }
@@ -936,10 +914,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public ArrayList gettypeDialogSearchAhkam() {
         ArrayList<DialogSearchDataModel> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "select * from Ahkam_types  ORDER BY ID ASC  ";
-        }else{
+        } else {
             sqlCheack = "select * from Ahkam_types  ORDER BY ID ASC  limit 5";
 
         }
@@ -949,33 +927,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String name_ = res.getString(res.getColumnIndex("Name"));
             String id = res.getString(res.getColumnIndex("ID"));
 
-            arrayList.add(new DialogSearchDataModel(name_,id,false));
+            arrayList.add(new DialogSearchDataModel(name_, id, false));
             res.moveToNext();
         }
-        try  {
+        try {
             res.close();
             closeDatabase();
         } catch (Exception e) {
             Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
             res.close();
             closeDatabase();
-        }finally{
+        } finally {
             res.close();
             closeDatabase();
         }
         return arrayList;
     }
-
-
 
 
     public ArrayList<DialogSearchDataModel> gettypeDialogSearch() {
         ArrayList<DialogSearchDataModel> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "select * from tash_type  ORDER BY ID ASC  ";
-        }else{
+        } else {
             sqlCheack = "select * from tash_type  ORDER BY ID ASC  limit 5";
 
         }
@@ -985,31 +961,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String name_ = res.getString(res.getColumnIndex("Name"));
             String id = res.getString(res.getColumnIndex("ID"));
 
-            arrayList.add(new DialogSearchDataModel(name_,id,false));
+            arrayList.add(new DialogSearchDataModel(name_, id, false));
             res.moveToNext();
         }
-        try  {
+        try {
             res.close();
             closeDatabase();
         } catch (Exception e) {
             Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
             res.close();
             closeDatabase();
-        }finally{
+        } finally {
             res.close();
             closeDatabase();
         }
         return arrayList;
     }
 
-//    Ios FUNC getAllTashreaatMainSectionSuccess
+    //    Ios FUNC getAllTashreaatMainSectionSuccess
     public ArrayList gettype() {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "select * from tash_type  ORDER BY ID ASC  ";
-        }else{
+        } else {
             sqlCheack = "select * from tash_type  ORDER BY ID ASC  limit 5";
 
         }
@@ -1019,30 +995,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String name_ = res.getString(res.getColumnIndex("Name"));
             String id = res.getString(res.getColumnIndex("ID"));
 
-            arrayList.add(new Master_Stract(name_,id,"","",null,"","",name_));
+            arrayList.add(new Master_Stract(name_, id, "", "", null, "", "", name_));
             res.moveToNext();
         }
-        try  {
+        try {
             res.close();
             closeDatabase();
         } catch (Exception e) {
             Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
             res.close();
             closeDatabase();
-        }finally{
+        } finally {
             res.close();
             closeDatabase();
         }
         return arrayList;
     }
+
     //    Ios FUNC getAllTashreaatYearsById
-    public ArrayList gettypeyear(String  type_id) {
+    public ArrayList gettypeyear(String type_id) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "select * from Tash_Type_Years  where Type_id like '" + type_id + "' ORDER BY T_Year DESC ";
-        }else{
+        } else {
             sqlCheack = "select * from Tash_Type_Years  where Type_id like '" + type_id + "' ORDER BY T_Year DESC limit 5";
 
         }
@@ -1051,33 +1028,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         while (!res.isAfterLast()) {
             String T_Year = res.getString(res.getColumnIndex("T_Year"));
             String Type_id = res.getString(res.getColumnIndex("Type_id"));
-            arrayList.add(new Master_Stract(T_Year,Type_id,null,null,null,"","",T_Year));
+            arrayList.add(new Master_Stract(T_Year, Type_id, null, null, null, "", "", T_Year));
             res.moveToNext();
         }
 
-        try  {
+        try {
             res.close();
             closeDatabase();
         } catch (Exception e) {
             Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
             res.close();
             closeDatabase();
-        }finally{
+        } finally {
             res.close();
             closeDatabase();
         }
         return arrayList;
     }
-//    Ios FUNC getTashreaatByYear
-    public ArrayList gettashTypeYear( String  typeid , String year) {
+
+    //    Ios FUNC getTashreaatByYear
+    public ArrayList gettashTypeYear(String typeid, String year) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
-            sqlCheack = " select Tash_id ,T_Type || ' رقم ' || T_No ||   ' لسنة '  ||  T_Year  as T_Short_name from Tash_master where Type_id = "  + typeid +  "  and T_Year = "  + year +  " order by T_No" ;
+            sqlCheack = " select Tash_id ,T_Type || ' رقم ' || T_No ||   ' لسنة '  ||  T_Year  as T_Short_name from Tash_master where Type_id = " + typeid + "  and T_Year = " + year + " order by T_No";
 
-        }else{
-            sqlCheack = " select Tash_id ,T_Type || ' رقم ' || T_No ||   ' لسنة '  ||  T_Year  as T_Short_name from Tash_master where Type_id = "  + typeid +  "  and T_Year = "  + year +  " order by T_No limit 5" ;
+        } else {
+            sqlCheack = " select Tash_id ,T_Type || ' رقم ' || T_No ||   ' لسنة '  ||  T_Year  as T_Short_name from Tash_master where Type_id = " + typeid + "  and T_Year = " + year + " order by T_No limit 5";
 
         }
         Cursor res = mDatabase.rawQuery(sqlCheack, null);
@@ -1086,11 +1064,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             String Tash_id = res.getString(res.getColumnIndex("Tash_id"));
             String T_Short_name = res.getString(res.getColumnIndex("T_Short_name"));
-            arrayList.add(new Master_Stract(Tash_id,T_Short_name,"","","","","",""));
+            arrayList.add(new Master_Stract(Tash_id, T_Short_name, "", "", "", "", "", ""));
             res.moveToNext();
 
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -1101,7 +1079,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -1111,11 +1089,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList Ahkam_mortbtaMda( String  mda_id) {
+    public ArrayList Ahkam_mortbtaMda(String mda_id) {
 
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "SELECT     ' الطعن رقم '  ||  Ahkam_master.C_No  ||  ' سنة ' ||    Ahkam_master.C_Year ||  ' بتاريخ  '  ||   Ahkam_master.date_galsa as hkm_title , Ahkam_master.hkm_mbda as hkm_details, Ahkam_master.path, \n" +
                     "                                         Ahkam_master.MASTER_ID, Ahkam_types.Name as Hkm_type\n" +
@@ -1123,7 +1101,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "                                         Ahkam_master ON Tash_Ahkam.hkm_id = Ahkam_master.ID_ INNER JOIN\n" +
                     "                                         Ahkam_types ON Ahkam_master.MASTER_ID = Ahkam_types.ID\n" +
                     "                    WHERE     (Tash_Ahkam.mda_id = " + mda_id + " )  group by hkm_id limit 50 ;";
-        }else{
+        } else {
             sqlCheack = "SELECT     ' الطعن رقم '  ||  Ahkam_master.C_No  ||  ' سنة ' ||    Ahkam_master.C_Year ||  ' بتاريخ  '  ||   Ahkam_master.date_galsa as hkm_title , Ahkam_master.hkm_mbda as hkm_details, Ahkam_master.path, \n" +
                     "                                         Ahkam_master.MASTER_ID, Ahkam_types.Name as Hkm_type\n" +
                     "                    FROM         Tash_Ahkam INNER JOIN\n" +
@@ -1139,13 +1117,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String hkm_details = res.getString(res.getColumnIndex("hkm_details"));
             String path = res.getString(res.getColumnIndex("path"));
             String Hkm_type = res.getString(res.getColumnIndex("Hkm_type"));
-            arrayList.add(new Master_Stract(hkm_title,hkm_details,null,null,null,null,path,Hkm_type));
+            arrayList.add(new Master_Stract(hkm_title, hkm_details, null, null, null, null, path, Hkm_type));
             res.moveToNext();
         }
 
         // Toast.makeText(mContext, String.valueOf(res.getCount()), Toast.LENGTH_SHORT).show();
 
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -1156,7 +1134,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -1166,14 +1144,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-    public ArrayList ShowFav( ) {
+    public ArrayList ShowFav() {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "select * from Favorite order by nameMaster";
-        }else{
+        } else {
             sqlCheack = "select * from Favorite order by nameMaster limit 5";
 
         }
@@ -1185,10 +1162,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String itemDetails = res.getString(res.getColumnIndex("itemDetails"));
             String nameMaster = res.getString(res.getColumnIndex("nameMaster"));
 
-            arrayList.add(new Master_Stract(itemName,itemDetails,"","","","","",nameMaster));
+            arrayList.add(new Master_Stract(itemName, itemDetails, "", "", "", "", "", nameMaster));
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -1199,7 +1176,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -1208,47 +1185,44 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public boolean insertData(String itemName,String itemDetails,String nameMaster) {
+    public boolean insertData(String itemName, String itemDetails, String nameMaster) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("itemName",itemName);
-        contentValues.put("itemDetails",itemDetails);
-        contentValues.put("nameMaster",nameMaster);
+        contentValues.put("itemName", itemName);
+        contentValues.put("itemDetails", itemDetails);
+        contentValues.put("nameMaster", nameMaster);
 
-        long result = db.insert("Favorite",null ,contentValues);
-        if(result == -1)
+        long result = db.insert("Favorite", null, contentValues);
+        if (result == -1)
             return false;
         else
             return true;
 
-       }
+    }
 
-    public void   deleteData (String itemName) {
-        String selectQuery = "DELETE FROM Favorite where itemName like '"  +  itemName + "'";
+    public void deleteData(String itemName) {
+        String selectQuery = "DELETE FROM Favorite where itemName like '" + itemName + "'";
         SQLiteDatabase db = this.getWritableDatabase();
-         db.execSQL(selectQuery) ;
+        db.execSQL(selectQuery);
     }
 
 
-
-
-
-    public boolean checkFavorite(String ItemName , String nameMaster) {
-        String sqlCheack = "" ;
+    public boolean checkFavorite(String ItemName, String nameMaster) {
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "select * from Favorite where itemName like '" + ItemName + "' and nameMaster like '" + nameMaster + "' ";
-        }else{
+        } else {
             sqlCheack = "select * from Favorite where itemName like '" + ItemName + "' and nameMaster like '" + nameMaster + "' limit 5";
 
         }
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        Cursor res = mDatabase.rawQuery( sqlCheack, null);
+        Cursor res = mDatabase.rawQuery(sqlCheack, null);
 
         if (res.getCount() != 0) {
-            return  true ;
+            return true;
         }
-         try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -1259,7 +1233,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -1269,7 +1243,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList<Master_Stract> SearchAhkam(String Word, String  Hkm_num_From ,String Hkm_num_To ,String Hkm_Year_From , String Hkm_Year_To ,String Office_from,String office_To,String Page_FROM,String Page_to,String Part_FROM,String Part_to,String sys_id ,String place_id,String date_galsa_From,String date_galsa_To,String Type_ids) {
+    public ArrayList<Master_Stract> SearchAhkam(String Word, String Hkm_num_From, String Hkm_num_To, String Hkm_Year_From, String Hkm_Year_To, String Office_from, String office_To, String Page_FROM, String Page_to, String Part_FROM, String Part_to, String sys_id, String place_id, String date_galsa_From, String date_galsa_To, String Type_ids) {
 
 
         String Hkm_NUM = " AND C_No BETWEEN " + Hkm_num_From + " AND " + Hkm_num_To;
@@ -1283,126 +1257,116 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //String Types = " AND Master_id in ('" + Type_ids + "')";
         String Types = " AND Master_id in (" + Type_ids + ")";
 
-        String convertword = arbicencodicSub(Word) ;
-        String Str = convertword.replace(" ","%");
+        String convertword = arbicencodicSub(Word);
+        String Str = convertword.replace(" ", "%");
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String Sql_Q = "SELECT  ' الطعن رقم '  ||  Ahkam_master.C_No  ||  ' سنة ' ||    Ahkam_master.C_Year ||  ' بتاريخ  '  ||   Ahkam_master.date_galsa as titel,master_id,hkm_mbda as details,path from ahkam_master   WHERE hkm_mbda LIKE '%" + Str + "%' " ;
-
+        String Sql_Q = "SELECT  ' الطعن رقم '  ||  Ahkam_master.C_No  ||  ' سنة ' ||    Ahkam_master.C_Year ||  ' بتاريخ  '  ||   Ahkam_master.date_galsa as titel,master_id,hkm_mbda as details,path from ahkam_master   WHERE hkm_mbda LIKE '%" + Str + "%' ";
 
 
         if (Type_ids.length() == 0) {
 
-            Sql_Q = Sql_Q  + " AND Master_id in (1,2,3,4,5,6,7,8)";
+            Sql_Q = Sql_Q + " AND Master_id in (1,2,3,4,5,6,7,8)";
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + Types ;
+            Sql_Q = Sql_Q + Types;
 
         }
 
 
         if (Hkm_num_From.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + Hkm_NUM ;
+            Sql_Q = Sql_Q + Hkm_NUM;
 
         }
 
 
         if (Hkm_Year_From.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + Year_Num ;
+            Sql_Q = Sql_Q + Year_Num;
 
         }
-
 
 
         if (Office_from.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + Office_Num ;
+            Sql_Q = Sql_Q + Office_Num;
 
         }
-
-
 
 
         if (Page_FROM.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + Page_Num ;
+            Sql_Q = Sql_Q + Page_Num;
 
         }
-
-
 
 
         if (Part_FROM.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + Part_Num ;
+            Sql_Q = Sql_Q + Part_Num;
 
         }
-
 
 
         if (sys_id.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + Sys ;
+            Sql_Q = Sql_Q + Sys;
 
         }
-
 
 
         if (place_id.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + place ;
+            Sql_Q = Sql_Q + place;
 
         }
-
-
 
 
         if (date_galsa_From.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + Date_Galsat ;
+            Sql_Q = Sql_Q + Date_Galsat;
 
         }
 
 
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = Sql_Q + " order by MASTER_ID desc";
-        }else{
+        } else {
             sqlCheack = Sql_Q + " order by MASTER_ID desc limit 5";
 
         }
@@ -1413,10 +1377,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String details = res.getString(res.getColumnIndex("details"));
             String Master = res.getString(res.getColumnIndex("MASTER_ID"));
             String path = res.getString(res.getColumnIndex("path"));
-            arrayList.add(new Master_Stract(titel,details,"","","",Master,path,""));
+            arrayList.add(new Master_Stract(titel, details, "", "", "", Master, path, ""));
             res.moveToNext();
         }
-        try  {
+        try {
             res.close();
             closeDatabase();
         } catch (Exception e) {
@@ -1425,7 +1389,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -1435,24 +1399,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public ArrayList<Master_Stract> SearchTash(String Tash_num_From, String Tash_num_To,
+                                               String Tash_year_From, String Tash_year_To, String Type_ids, String Date_Tash_from,
+                                               String Date_Tash_To, int search_mda, String TxtMada, String Tash_name) {
+        String convertword = arbicencodicSub(Tash_name);
+        String Str = convertword.replace(" ", "%");
 
-
-
-    public ArrayList<Master_Stract> SearchTash( String  Tash_num_From ,String Tash_num_To ,
-               String  Tash_year_From ,String Tash_year_To ,String Type_ids ,String Date_Tash_from,
-                String Date_Tash_To,int search_mda,String TxtMada,String Tash_name) {
-        String convertword = arbicencodicSub(Tash_name) ;
-        String Str = convertword.replace(" ","%");
-
-        String convertword_ = arbicencodicSub(TxtMada) ;
-        String Str_ = convertword_.replace(" ","%");
+        String convertword_ = arbicencodicSub(TxtMada);
+        String Str_ = convertword_.replace(" ", "%");
 
 
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
 
 
-        String Sql_Q = "" ;
+        String Sql_Q = "";
 
         if (search_mda == 1) {
 
@@ -1462,16 +1423,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "            Tash_mowad ON Tash_master.Tash_id = Tash_mowad.Tash_id\n" +
                     "            WHERE  1=1 ";
 
-        }else {
+        } else {
 
-             Sql_Q = "SELECT     Tash_Type.Name, Tash_master.T_No, Tash_master.T_Year, Tash_master.Tash_id, Tash_master.T_name\n" +
+            Sql_Q = "SELECT     Tash_Type.Name, Tash_master.T_No, Tash_master.T_Year, Tash_master.Tash_id, Tash_master.T_name\n" +
                     "FROM         Tash_master INNER JOIN\n" +
                     "                      Tash_Type ON Tash_master.Type_ID = Tash_Type.ID\n" +
-                    "WHERE    1=1" ;
+                    "WHERE    1=1";
 
         }
-
-
 
 
         String TashNum = " AND T_No BETWEEN " + Tash_num_From + " AND " + Tash_num_To;
@@ -1483,70 +1442,69 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (Tash_name.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + TashName ;
+            Sql_Q = Sql_Q + TashName;
 
         }
 
         if (TxtMada.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + MdaString ;
+            Sql_Q = Sql_Q + MdaString;
 
         }
 
         if (Tash_num_From.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + TashNum ;
+            Sql_Q = Sql_Q + TashNum;
 
         }
 
         if (Tash_year_From.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + TashYear ;
+            Sql_Q = Sql_Q + TashYear;
 
         }
 
         if (Type_ids.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + TypeidS ;
+            Sql_Q = Sql_Q + TypeidS;
 
         }
 
         if (Date_Tash_from.length() == 0) {
 
-            Sql_Q = Sql_Q ;
+            Sql_Q = Sql_Q;
 
-        }else{
+        } else {
 
-            Sql_Q = Sql_Q + Date_Tash ;
+            Sql_Q = Sql_Q + Date_Tash;
 
         }
 
 
-
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = Sql_Q + " ORDER BY Type_ID , T_D_Year";
-        }else{
+        } else {
             sqlCheack = Sql_Q + " ORDER BY Type_ID , T_D_Year limit 5";
 
         }
@@ -1555,14 +1513,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Cursor res = mDatabase.rawQuery(sqlCheack, null);
         res.moveToFirst();
         while (!res.isAfterLast()) {
-             String tash_name = res.getString(res.getColumnIndex("T_name"));
+            String tash_name = res.getString(res.getColumnIndex("T_name"));
 
             String Tash_id = res.getString(res.getColumnIndex("Tash_id"));
 
-            arrayList.add(new Master_Stract("",tash_name,"",Tash_id,"","","",""));
+            arrayList.add(new Master_Stract("", tash_name, "", Tash_id, "", "", "", ""));
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -1573,7 +1531,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -1582,16 +1540,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList searhchTashMowad( String  word ) {
-        String convertword = arbicencodicSub(word) ;
-        String Str = convertword.replace(" ","%");
+    public ArrayList searhchTashMowad(String word) {
+        String convertword = arbicencodicSub(word);
+        String Str = convertword.replace(" ", "%");
 
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = " SELECT tash_mowad.titel,tash_mowad.number,tash_mowad.details,tash_master.list_txt_name FROM tash_mowad Inner Join tash_master ON tash_master.Tash_id = tash_mowad.Tash_id  WHERE tash_mowad.details LIKE '%" + Str + "%' order by tash_master.Tash_id,tash_mowad.number asc";
-        }else{
+        } else {
             sqlCheack = " SELECT tash_mowad.titel,tash_mowad.number,tash_mowad.details,tash_master.list_txt_name FROM tash_mowad Inner Join tash_master ON tash_master.Tash_id = tash_mowad.Tash_id  WHERE tash_mowad.details LIKE '%" + Str + "%' order by tash_master.Tash_id,tash_mowad.number asc limit 5";
         }
         Cursor res = mDatabase.rawQuery(sqlCheack, null);
@@ -1601,10 +1559,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String titel = res.getString(res.getColumnIndex("titel"));
             String details = res.getString(res.getColumnIndex("details"));
             String list_txt_name = res.getString(res.getColumnIndex("list_txt_name"));
-            arrayList.add(new Master_Stract(titel,details,list_txt_name,"","","","",list_txt_name));
+            arrayList.add(new Master_Stract(titel, details, list_txt_name, "", "", "", "", list_txt_name));
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -1615,7 +1573,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -1625,14 +1583,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList searchNaqdAhkam( String  word ) {
-        String convertword = arbicencodicSub(word) ;
-        String Str = convertword.replace(" ","%");
-        String sqlCheack = "" ;
+    public ArrayList searchNaqdAhkam(String word) {
+        String convertword = arbicencodicSub(word);
+        String Str = convertword.replace(" ", "%");
+        String sqlCheack = "";
         if (Var.Active) {
-            sqlCheack = "select * from ahkam_master WHERE details LIKE '%"+ Str + "%' group by details ORDER BY MASTER_ID , hkm_Master_year ";
-        }else{
-            sqlCheack = "select * from ahkam_master WHERE details LIKE '%"+ Str + "%' group by details ORDER BY MASTER_ID , hkm_Master_year limit 5";
+            sqlCheack = "select * from ahkam_master WHERE details LIKE '%" + Str + "%' group by details ORDER BY MASTER_ID , hkm_Master_year ";
+        } else {
+            sqlCheack = "select * from ahkam_master WHERE details LIKE '%" + Str + "%' group by details ORDER BY MASTER_ID , hkm_Master_year limit 5";
 
         }
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
@@ -1646,11 +1604,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String name_ = res.getString(res.getColumnIndex("Master_name"));
 
 
-
-            arrayList.add(new Master_Stract(titel,details,name_,"","","",    "نص" ,name_) );
+            arrayList.add(new Master_Stract(titel, details, name_, "", "", "", "نص", name_));
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -1661,7 +1618,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -1671,21 +1628,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-    public ArrayList searchAllTash( String  word ) {
-        String convertword = arbicencodicSub(word) ;
-        String Str = convertword.replace(" ","%");
+    public ArrayList searchAllTash(String word) {
+        String convertword = arbicencodicSub(word);
+        String Str = convertword.replace(" ", "%");
 
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "select * from tash_master WHERE tash_name LIKE '%" + Str + "%' ORDER BY Type_ID , T_D_Year";
-        }else{
+        } else {
             sqlCheack = "select * from tash_master WHERE tash_name LIKE '%" + Str + "%' ORDER BY Type_ID , T_D_Year limit 5";
 
         }
-        Cursor res ;
-       res = mDatabase.rawQuery(  sqlCheack, null);
+        Cursor res;
+        res = mDatabase.rawQuery(sqlCheack, null);
         res.moveToFirst();
         while (!res.isAfterLast()) {
 
@@ -1693,18 +1650,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String T_Type = res.getString(res.getColumnIndex("T_Type"));
             String Tash_id = res.getString(res.getColumnIndex("Tash_id"));
             String info = "التشريعات";
-            arrayList.add(new Master_Stract(list_txt_name,T_Type,info,Tash_id,"","","تشريع"  ,list_txt_name));
+            arrayList.add(new Master_Stract(list_txt_name, T_Type, info, Tash_id, "", "", "تشريع", list_txt_name));
             res.moveToNext();
         }
 
-        String sqlCheack1 = "" ;
+        String sqlCheack1 = "";
         if (Var.Active) {
             sqlCheack1 = "SELECT tash_mowad.titel,tash_mowad.number,tash_mowad.details,tash_master.list_txt_name,tash_master.Tash_id FROM tash_mowad Inner Join tash_master ON tash_master.Tash_id = tash_mowad.Tash_id  WHERE tash_mowad.details LIKE '%" + Str + "%' group by details ORDER BY tash_mowad.number ASC";
-        }else{
+        } else {
             sqlCheack1 = "SELECT tash_mowad.titel,tash_mowad.number,tash_mowad.details,tash_master.list_txt_name,tash_master.Tash_id FROM tash_mowad Inner Join tash_master ON tash_master.Tash_id = tash_mowad.Tash_id  WHERE tash_mowad.details LIKE '%" + Str + "%' group by details ORDER BY tash_mowad.number ASC limit 5";
 
         }
-       res = mDatabase.rawQuery( sqlCheack1 , null);
+        res = mDatabase.rawQuery(sqlCheack1, null);
         res.moveToFirst();
         while (!res.isAfterLast()) {
 
@@ -1713,35 +1670,34 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String details = res.getString(res.getColumnIndex("details"));
             String list_txt_name = res.getString(res.getColumnIndex("list_txt_name"));
             String info = " مواد " + res.getString(res.getColumnIndex("list_txt_name"));
-            arrayList.add(new Master_Stract(titel,details,info,Tash_id,"","", "نص",   list_txt_name) );
+            arrayList.add(new Master_Stract(titel, details, info, Tash_id, "", "", "نص", list_txt_name));
             res.moveToNext();
         }
 
 
-
-        String sqlCheack2 = "" ;
+        String sqlCheack2 = "";
         if (Var.Active) {
             sqlCheack2 = "select tash_ahkam.titel,tash_ahkam.Tash_name,ahkam_master.Master_name,ahkam_master.details,ahkam_master.MASTER_ID from tash_ahkam INNER JOIN ahkam_master ON ahkam_master.id = tash_ahkam.hkm_id WHERE ahkam_master.details LIKE '%" + Str + "%' group by ahkam_master.details";
-        }else{
+        } else {
             sqlCheack2 = "select tash_ahkam.titel,tash_ahkam.Tash_name,ahkam_master.Master_name,ahkam_master.details,ahkam_master.MASTER_ID from tash_ahkam INNER JOIN ahkam_master ON ahkam_master.id = tash_ahkam.hkm_id WHERE ahkam_master.details LIKE '%" + Str + "%' group by ahkam_master.details limit 5";
         }
-        res = mDatabase.rawQuery( sqlCheack2,null );
+        res = mDatabase.rawQuery(sqlCheack2, null);
         res.moveToFirst();
-         while (!res.isAfterLast()) {
+        while (!res.isAfterLast()) {
 
             String titel = res.getString(res.getColumnIndex("titel"));
             String details = res.getString(res.getColumnIndex("details"));
-             String Master = res.getString(res.getColumnIndex("MASTER_ID"));
-             String name_ = res.getString(res.getColumnIndex("Master_name"));
-             String Tash_name = res.getString(res.getColumnIndex("Tash_name"));
+            String Master = res.getString(res.getColumnIndex("MASTER_ID"));
+            String name_ = res.getString(res.getColumnIndex("Master_name"));
+            String Tash_name = res.getString(res.getColumnIndex("Tash_name"));
 
-             String info = " الاحكام المرتبطة بـ" + Tash_name;
-            arrayList.add(new Master_Stract(titel,details,info,"","","", "نص",name_));
+            String info = " الاحكام المرتبطة بـ" + Tash_name;
+            arrayList.add(new Master_Stract(titel, details, info, "", "", "", "نص", name_));
             res.moveToNext();
         }
 
 
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -1752,7 +1708,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -1761,15 +1717,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public ArrayList searchQiods( String  Word ) {
+    public ArrayList searchQiods(String Word) {
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String convertword = arbicencodicSub(Word) ;
-        String Str = convertword.replace(" ","%");
-        String sqlCheack = "" ;
+        String convertword = arbicencodicSub(Word);
+        String Str = convertword.replace(" ", "%");
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = "select * from tb_niba_Topics WHERE text LIKE '%" + Str + "%' and T_id not like '11' and T_id not like '12' order by T_id";
-        }else{
+        } else {
             sqlCheack = "select * from tb_niba_Topics WHERE text LIKE '%" + Str + "%' and T_id not like '11' and T_id not like '12' order by T_id limit 5";
 
         }
@@ -1783,10 +1739,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String details = res.getString(res.getColumnIndex("text"));
             String name = res.getString(res.getColumnIndex("name_"));
 
-            arrayList.add(new Master_Stract(titel,details,name,"","","", "نص",name ));
+            arrayList.add(new Master_Stract(titel, details, name, "", "", "", "نص", name));
             res.moveToNext();
         }
-        try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -1797,7 +1753,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -1807,22 +1763,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
-
-    public ArrayList searchHithiat( String  Word ) {
-        String convertword = arbicencodicSub(Word) ;
-        String Str = convertword.replace(" ","%");
+    public ArrayList searchHithiat(String Word) {
+        String convertword = arbicencodicSub(Word);
+        String Str = convertword.replace(" ", "%");
 
         ArrayList<Master_Stract> arrayList = new ArrayList<>();
         openDatabase();
-        String sqlCheack = "" ;
+        String sqlCheack = "";
         if (Var.Active) {
             sqlCheack = " select * from Hithiat_law WHERE details LIKE '%" + Str + "%' group by details order by xtopic_name";
-        }else{
+        } else {
             sqlCheack = " select * from Hithiat_law WHERE details LIKE '%" + Str + "%' group by details order by xtopic_name limit 5";
 
         }
-        Cursor res ;
-               res = mDatabase.rawQuery(sqlCheack, null);
+        Cursor res;
+        res = mDatabase.rawQuery(sqlCheack, null);
         res.moveToFirst();
         while (!res.isAfterLast()) {
 
@@ -1831,15 +1786,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String type_id = res.getString(res.getColumnIndex("type_id"));
             String name_ = res.getString(res.getColumnIndex("type_name"));
             String topic_name = res.getString(res.getColumnIndex("xtopic_name"));
-            String info = name_ + ":::" + topic_name ;
-            arrayList.add(new Master_Stract(titel,details,info,"","","","نص" , info));
+            String info = name_ + ":::" + topic_name;
+            arrayList.add(new Master_Stract(titel, details, info, "", "", "", "نص", info));
             res.moveToNext();
         }
 
-        String sqlCheack1 = "" ;
+        String sqlCheack1 = "";
         if (Var.Active) {
             sqlCheack1 = " select * from Hithiat_nkd WHERE details LIKE '%" + Str + "%' group by details order by xtopic_name";
-        }else{
+        } else {
             sqlCheack1 = " select * from Hithiat_nkd WHERE details LIKE '%" + Str + "%' group by details order by xtopic_name limit 5";
 
         }
@@ -1852,24 +1807,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String details = res.getString(res.getColumnIndex("details"));
             String type_id = res.getString(res.getColumnIndex("type_id"));
             String name_ = res.getString(res.getColumnIndex("type_name"));
-           String topic_name = res.getString(res.getColumnIndex("xtopic_name"));
-            String info = name_ + ":::" + topic_name ;
-            arrayList.add(new Master_Stract(titel,details,info,"","","","نص" , info));
+            String topic_name = res.getString(res.getColumnIndex("xtopic_name"));
+            String info = name_ + ":::" + topic_name;
+            arrayList.add(new Master_Stract(titel, details, info, "", "", "", "نص", info));
 
-             res.moveToNext();
+            res.moveToNext();
         }
 
 
-        String sqlCheack2 = "" ;
+        String sqlCheack2 = "";
         if (Var.Active) {
             sqlCheack2 = "select * from Hithiat WHERE topic_name LIKE '%" + Str + "%'";
-        }else{
+        } else {
             sqlCheack2 = "select * from Hithiat WHERE topic_name LIKE '%" + Str + "%' limit 5";
 
         }
         res = mDatabase.rawQuery(sqlCheack2, null);
         res.moveToFirst();
-        String name_ = "" ;
+        String name_ = "";
         while (!res.isAfterLast()) {
 
             String titel = res.getString(res.getColumnIndex("topic_name"));
@@ -1877,19 +1832,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String Master = res.getString(res.getColumnIndex("type_id"));
 
 
-            if (Master.contains("2") ) {
+            if (Master.contains("2")) {
                 name_ = "الحيثيات الجنائية";
-            }else if (Master.contains("1")) {
+            } else if (Master.contains("1")) {
                 name_ = "الحيثيات المدنية";
 
             }
-            arrayList.add(new Master_Stract(titel,_id,name_,Master,"","","حيثيات" ,name_));
+            arrayList.add(new Master_Stract(titel, _id, name_, Master, "", "", "حيثيات", name_));
             res.moveToNext();
         }
-        String sqlCheack3 = "" ;
+        String sqlCheack3 = "";
         if (Var.Active) {
-            sqlCheack3= "select * from tb_niba_Topics WHERE text LIKE '%" + Str + "%' and T_id in (11,12) order by T_id";
-        }else{
+            sqlCheack3 = "select * from tb_niba_Topics WHERE text LIKE '%" + Str + "%' and T_id in (11,12) order by T_id";
+        } else {
             sqlCheack3 = "select * from tb_niba_Topics WHERE text LIKE '%" + Str + "%' and T_id in (11,12) order by T_id limit 5";
 
         }
@@ -1904,16 +1859,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String name = res.getString(res.getColumnIndex("name_"));
 
 
-            arrayList.add(new Master_Stract(titel,details,name,"","","",  "نص" ,name));
+            arrayList.add(new Master_Stract(titel, details, name, "", "", "", "نص", name));
             res.moveToNext();
         }
 
 
-
-
-
-
-         try  {
+        try {
 
             res.close();
             closeDatabase();
@@ -1924,7 +1875,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             res.close();
             closeDatabase();
 
-        }finally{
+        } finally {
 
             res.close();
             closeDatabase();
@@ -1933,8 +1884,92 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public ArrayList<Master_Stract> searchListQiods(String Word) {
+        ArrayList<Master_Stract> arrayList = new ArrayList<>();
+        openDatabase();
+        String convertword = arbicencodicSub(Word);
+        String Str = convertword.replace(" ", "%");
+        String sqlCheack = "";
+        if (Var.Active) {
+            sqlCheack = "SELECT    Niba_books.Name,Niba_books_Details.title,Niba_books_Details.details\n" +
+                    "FROM        Niba_books_Details INNER JOIN\n" +
+                    "                     Niba_books ON Niba_books_Details.Type_id =Niba_books.ID\n" +
+                    "WHERE     (Niba_books_Details.details LIKE '%" + Word + "%') limit 5";
+        } else {
+            sqlCheack = "SELECT    Niba_books.Name,Niba_books_Details.title,Niba_books_Details.details\n" +
+                    "FROM        Niba_books_Details INNER JOIN\n" +
+                    "                     Niba_books ON Niba_books_Details.Type_id =Niba_books.ID\n" +
+                    "WHERE     (Niba_books_Details.details LIKE '%" + Word + "%') ";
+
+        }
+
+
+        Cursor res = mDatabase.rawQuery(sqlCheack, null);
+        res.moveToFirst();
+        while (!res.isAfterLast()) {
+
+            String titel = res.getString(res.getColumnIndex("title"));
+            String details = res.getString(res.getColumnIndex("details"));
+            String name = res.getString(res.getColumnIndex("Name"));
+
+            arrayList.add(new Master_Stract(titel, details, name, "", "", "", "نص", name));
+            res.moveToNext();
+        }
+        try {
+
+            res.close();
+            closeDatabase();
+
+        } catch (Exception e) {
+            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+
+            res.close();
+            closeDatabase();
+
+        } finally {
+
+            res.close();
+            closeDatabase();
+        }
+        return arrayList;
 
     }
+
+    public ArrayList<Master_Stract> searchHithiatLocal(String Word) {
+        String convertword = arbicencodicSub(Word);
+        String Str = convertword.replace(" ", "%");
+
+        ArrayList<Master_Stract> arrayList = new ArrayList<>();
+        openDatabase();
+        String sqlCheack = "";
+        if (Var.Active) {
+            sqlCheack = "SELECT      Hithiat_books.id,  Hithiat_books.name,  Hithiat_books_Topics.Name AS Titel,  Hithiat_books_Topics.Type_id\n" +
+                    "FROM          Hithiat_books_Topics INNER JOIN\n" +
+                    "                       Hithiat_books ON  Hithiat_books_Topics.Type_id =  Hithiat_books.id\n" +
+                    "WHERE     ( Hithiat_books_Topics.Name LIKE '%" + Str + "%') ORDER BY Hithiat_books_Topics.Type_id";
+        } else {
+            sqlCheack = "SELECT      Hithiat_books.id,  Hithiat_books.name,  Hithiat_books_Topics.Name AS Titel,  Hithiat_books_Topics.Type_id\n" +
+                    "FROM          Hithiat_books_Topics INNER JOIN\n" +
+                    "                       Hithiat_books ON  Hithiat_books_Topics.Type_id =  Hithiat_books.id\n" +
+                    "WHERE     ( Hithiat_books_Topics.Name LIKE '%" + Str + "%')  ORDER BY Hithiat_books_Topics.Type_id limit 5";
+
+        }
+        Cursor res;
+        res = mDatabase.rawQuery(sqlCheack, null);
+        res.moveToFirst();
+        while (!res.isAfterLast()) {
+
+            String name = res.getString(res.getColumnIndex("name"));
+            String Titel = res.getString(res.getColumnIndex("Titel"));
+            String Type_id = res.getString(res.getColumnIndex("Type_id"));
+
+            arrayList.add(new Master_Stract(name, Titel, Type_id, "", "", "", "",""));
+            res.moveToNext();
+        }
+        return arrayList;
+    }
+
+}
 
 
 

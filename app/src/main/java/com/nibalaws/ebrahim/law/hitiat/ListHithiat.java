@@ -20,17 +20,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-
-import java.util.ArrayList;
-
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
 import com.nibalaws.ebrahim.law.HomeActivity;
 import com.nibalaws.ebrahim.law.R;
+import com.nibalaws.ebrahim.law.util.Util;
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ListHithiat extends AppCompatActivity implements SearchView.OnQueryTextListener {
     public static int lstindx;
     public static String titlname;
+    @BindView(R.id.FavoriteTxtBack)
+    TextView FavoriteTxtBack;
     private SVProgressHUD mSVProgressHUD;
     int progress = 0;
     private ListView lv;
@@ -47,8 +52,11 @@ public class ListHithiat extends AppCompatActivity implements SearchView.OnQuery
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
         //setContentView(R.layout.itemlist);
         setContentView(R.layout.layout_favorite);
+        ButterKnife.bind(this);
+        Util.setViewsTypeface(this, FavoriteTxtBack);
         sv = (SearchView) findViewById(R.id.search_view);
         lv = (ListView) findViewById(R.id.lstContact);
         mSVProgressHUD = new SVProgressHUD(this);
@@ -169,12 +177,12 @@ public class ListHithiat extends AppCompatActivity implements SearchView.OnQuery
             return view;
         }
 
-        CustomAdapter.ValueFilter valueFilter;
+        ValueFilter valueFilter;
 
         @Override
         public Filter getFilter() {
             if (valueFilter == null) {
-                valueFilter = new CustomAdapter.ValueFilter();
+                valueFilter = new ValueFilter();
             }
             return valueFilter;
         }

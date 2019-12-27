@@ -34,10 +34,12 @@ import com.nibalaws.ebrahim.law.DataBaseManger.Var;
 import com.nibalaws.ebrahim.law.HomeActivity;
 import com.nibalaws.ebrahim.law.R;
 import com.nibalaws.ebrahim.law.Tash.Tashahkambymda;
+import com.nibalaws.ebrahim.law.util.Util;
 import com.nibalaws.ebrahim.law.webview;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.refactor.lib.colordialog.PromptDialog;
@@ -54,13 +56,13 @@ public class textViewHithiat extends Activity implements GestureOverlayView.OnGe
     ImageButton b1;
     ImageButton b2;
     ImageButton b3;
-    RelativeLayout relativeLayout;
-    RelativeLayout relativeLayout2;
+//    RelativeLayout relativeLayout;
+//    RelativeLayout relativeLayout2;
     TextView titelTxt;
     Button bt;
     GestureOverlayView gesture;
     GestureLibrary lib;
-    ScrollView scrollView;
+    //ScrollView scrollView;
     ImageButton b4;
     public static ArrayList<Master_Stract> ArrayTXt = new ArrayList<>();
     TextView txt;
@@ -68,6 +70,8 @@ public class textViewHithiat extends Activity implements GestureOverlayView.OnGe
     Integer flag = 0;
     DatabaseHelper db;
     public static String titlname;
+    @BindView(R.id.TV_back)
+    TextView TVBack;
 
     private GestureDetector gestureDetector;
     View.OnTouchListener gestureListener;
@@ -75,14 +79,16 @@ public class textViewHithiat extends Activity implements GestureOverlayView.OnGe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
 //        setContentView(R.layout.txt);
         setContentView(R.layout.layout_law_articles);
         ButterKnife.bind(this);
-        txt = (TextView) findViewById(R.id.txt);
+        Util.setViewsTypeface(this, TVBack);
+        txt = (TextView) findViewById(R.id.txtArt);
         txt2 = (TextView) findViewById(R.id.txtname);
-        scrollView = (ScrollView) findViewById(R.id.scrollView2);
-        relativeLayout = (RelativeLayout) findViewById(R.id.rel);
-        relativeLayout2 = (RelativeLayout) findViewById(R.id.ret);
+//        scrollView = (ScrollView) findViewById(R.id.scrollView2);
+//        relativeLayout = (RelativeLayout) findViewById(R.id.rel);
+//        relativeLayout2 = (RelativeLayout) findViewById(R.id.ret);
         mSVProgressHUD = new SVProgressHUD(this);
         db = new DatabaseHelper(this);
         b1 = (ImageButton) findViewById(R.id.bt_next);
@@ -135,8 +141,8 @@ public class textViewHithiat extends Activity implements GestureOverlayView.OnGe
             };
 
             txt.setOnTouchListener(gestureListener);
-            scrollView.setOnTouchListener(gestureListener);
-            relativeLayout.setOnTouchListener(gestureListener);
+//            scrollView.setOnTouchListener(gestureListener);
+//            relativeLayout.setOnTouchListener(gestureListener);
 
         } catch (Exception e) {
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();

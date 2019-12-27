@@ -15,6 +15,10 @@ import android.widget.TextView;
 
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.DataBaseManger.Var;
+import com.nibalaws.ebrahim.law.util.Util;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class settings extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener,
@@ -22,13 +26,18 @@ public class settings extends AppCompatActivity implements SeekBar.OnSeekBarChan
     SeekBar seekBar1;
     Switch mySwitch;
     DatabaseHelper db;
+    @BindView(R.id.txt_back)
+    TextView txtBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.settings);
+        Util.setLocaleAr(this);
         setContentView(R.layout.layout_settings);
+        ButterKnife.bind(this);
         SetStyleControls();
+        Util.setViewsTypeface(this, txtBack);
         db = new DatabaseHelper(this);
 
         seekBar1 = (SeekBar) findViewById(R.id.seekBar1);

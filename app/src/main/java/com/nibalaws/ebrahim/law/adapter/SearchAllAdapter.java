@@ -31,17 +31,23 @@ public class SearchAllAdapter extends RecyclerView.Adapter<SearchAllAdapter.Sear
     @Override
     public SearchAllHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new SearchAllHolder(LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_n, parent, false), mOnItemClick);
+                .inflate(R.layout.item_t, parent, false), mOnItemClick);
     }
 
     @Override
     public void onBindViewHolder(SearchAllHolder holder, int position) {
         SearchAllResponse searchAllResponse = mSearchAllList.get(position);
-        holder.item1.setText(searchAllResponse.getInfo());
-        holder.item2.setText(searchAllResponse.getData());
+        holder.item1.setText(searchAllResponse.getSubInfo());
+        holder.item2.setText(searchAllResponse.getInfo());
+        holder.item3.setText(searchAllResponse.getData());
+
+        holder.item1.setTextColor(mContext.getResources().getColor(R.color.myPrimaryColor));
+        holder.item2.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+        holder.item3.setTextColor(mContext.getResources().getColor(R.color.colorAccent));
 
         Util.setViewsTypeface(mContext, holder.item1);
         Util.setViewsTypeface(mContext, holder.item2);
+        Util.setViewsTypeface(mContext, holder.item3);
     }
 
     @Override
@@ -55,6 +61,8 @@ public class SearchAllAdapter extends RecyclerView.Adapter<SearchAllAdapter.Sear
         TextView item1;
         @BindView(R.id.item2)
         TextView item2;
+        @BindView(R.id.item3)
+        TextView item3;
         private final View view;
 
         private OnItemClick mOnItemClick;

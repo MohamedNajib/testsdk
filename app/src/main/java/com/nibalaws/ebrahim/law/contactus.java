@@ -1,5 +1,6 @@
 package com.nibalaws.ebrahim.law;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.net.Uri;
@@ -12,15 +13,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nibalaws.ebrahim.law.util.Util;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 public class contactus extends AppCompatActivity {
 
+
+    @BindView(R.id.CallUsTxtBack)
+    TextView CallUsTxtBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        setContentView(R.layout.contactus);
+        Util.setLocaleAr(this);
         setContentView(R.layout.layout_call_us);
+        ButterKnife.bind(this);
+        Util.setViewsTypeface(this, CallUsTxtBack);
         SetStyleControls();
         TextView txt = (TextView) findViewById(R.id.textView6);
 
@@ -139,7 +151,7 @@ public class contactus extends AppCompatActivity {
         i.putExtra(Intent.EXTRA_TEXT, t3.getText().toString());
         try {
             startActivity(Intent.createChooser(i, "اختر التطبيق الخاص بك"));
-        } catch (android.content.ActivityNotFoundException ex) {
+        } catch (ActivityNotFoundException ex) {
             Toast.makeText(contactus.this, "لا توجد تطبيقات مثبته خاصه بالبريد الإلكتروني", Toast.LENGTH_SHORT).show();
         }
     }

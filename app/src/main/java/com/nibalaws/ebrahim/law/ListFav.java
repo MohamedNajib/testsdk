@@ -20,15 +20,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-
-import java.util.ArrayList;
-
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
 import com.nibalaws.ebrahim.law.Qiod.textView;
+import com.nibalaws.ebrahim.law.util.Util;
+
+import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ListFav extends AppCompatActivity implements SearchView.OnQueryTextListener {
     public static int lstindx;
+    @BindView(R.id.FavoriteTxtBack)
+    TextView FavoriteTxtBack;
     private SVProgressHUD mSVProgressHUD;
     int progress = 0;
     private ListView lv;
@@ -38,13 +43,17 @@ public class ListFav extends AppCompatActivity implements SearchView.OnQueryText
     public static ArrayList<Master_Stract> Master_Array = new ArrayList<>();
     public static ArrayList<Master_Stract> fillterArray = new ArrayList<>();
     private Boolean ISsEARCHING = false;
-    DatabaseHelper db ;
+    DatabaseHelper db;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
 //        setContentView(R.layout.itemlist);
         setContentView(R.layout.layout_favorite);
-        db =  new DatabaseHelper(this);
+        ButterKnife.bind(this);
+        Util.setViewsTypeface(this,FavoriteTxtBack);
+        db = new DatabaseHelper(this);
 
         sv = (SearchView) findViewById(R.id.search_view);
         lv = (ListView) findViewById(R.id.lstContact);
@@ -53,17 +62,17 @@ public class ListFav extends AppCompatActivity implements SearchView.OnQueryText
         titelTxt = (TextView) findViewById(R.id.txtTitel);
         Typeface type = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
         titelTxt.setTypeface(type);
-         adapter = new CustomAdapter(getApplicationContext(), Master_Array);
+        adapter = new CustomAdapter(getApplicationContext(), Master_Array);
         sv.setOnQueryTextListener(this);
         lv.setAdapter(adapter);
-         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 try {
 
-                    lstindx = position ;
-                    new ViewTxt().execute() ;
+                    lstindx = position;
+                    new ViewTxt().execute();
 
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -72,7 +81,7 @@ public class ListFav extends AppCompatActivity implements SearchView.OnQueryText
         });
 
 
-        ImageView homeclick= (ImageView) findViewById(R.id.homeclick);
+        ImageView homeclick = (ImageView) findViewById(R.id.homeclick);
         homeclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +93,7 @@ public class ListFav extends AppCompatActivity implements SearchView.OnQueryText
 
             }
         });
-        ImageView backclick= (ImageView) findViewById(R.id.backclik);
+        ImageView backclick = (ImageView) findViewById(R.id.backclik);
         backclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,7 +102,7 @@ public class ListFav extends AppCompatActivity implements SearchView.OnQueryText
 
             }
         });
-        sv.setOnClickListener(  new View.OnClickListener() {
+        sv.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -104,10 +113,6 @@ public class ListFav extends AppCompatActivity implements SearchView.OnQueryText
     }
 
 
-
-
-
-
     protected void onPause() {
         // Whenever this activity is paused (i.e. looses focus because another activity is started etc)
         // Override how this activity is animated out of view
@@ -115,6 +120,7 @@ public class ListFav extends AppCompatActivity implements SearchView.OnQueryText
         overridePendingTransition(R.anim.hold, R.anim.svfade_out_center);
         super.onPause();
     }
+
     @Override
     public boolean onQueryTextSubmit(String s) {
         return false;
@@ -169,7 +175,6 @@ public class ListFav extends AppCompatActivity implements SearchView.OnQueryText
             }
 
 
-
             ImageView IMGbUTTON = (ImageView) view.findViewById(R.id.imgbt);
 
 
@@ -181,16 +186,16 @@ public class ListFav extends AppCompatActivity implements SearchView.OnQueryText
                 public void onClick(View v) {
 
                     View parentRow = (View) v.getParent();
-                     final int position = lv.getPositionForView(parentRow);
-                     db.deleteData(Master_Array.get(position).getItem1());
+                    final int position = lv.getPositionForView(parentRow);
+                    db.deleteData(Master_Array.get(position).getItem1());
                     Master_Array.remove(position);
 
-                     adapter.notifyDataSetChanged();
-                 }
+                    adapter.notifyDataSetChanged();
+                }
             });
 
 
-           Master_Stract bean = beanList.get(i);
+            Master_Stract bean = beanList.get(i);
 
             TextView item1_txt = (TextView) view.findViewById(R.id.item1);
             String item1 = bean.getItem1();
@@ -272,14 +277,13 @@ public class ListFav extends AppCompatActivity implements SearchView.OnQueryText
     }
 
 
-
-     private class ViewTxt extends AsyncTask<Void, Void, String> {
+    private class ViewTxt extends AsyncTask<Void, Void, String> {
         protected String doInBackground(Void... params) {
             try {
 
                 if (ISsEARCHING) {
                     textView.ArrayTXt = fillterArray;
-                }else{
+                } else {
                     textView.ArrayTXt = Master_Array;
                 }
 
@@ -290,25 +294,26 @@ public class ListFav extends AppCompatActivity implements SearchView.OnQueryText
 
         }
 
-         @Override
+        @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             try {
                 mSVProgressHUD.dismiss();
                 super.onPostExecute(result);
                 Intent intent = new Intent(ListFav.this, textView.class);
-                 textView.index = lstindx;
-                 startActivity(intent);
+                textView.index = lstindx;
+                startActivity(intent);
 
-            }catch (Exception e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();}
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
 
         }
-         @Override
+
+        @Override
         protected void onPreExecute() {
             mSVProgressHUD.show();
         }
-
 
 
     }

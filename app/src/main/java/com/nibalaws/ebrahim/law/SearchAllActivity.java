@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.nibalaws.ebrahim.law.adapter.SearchAllAdapter;
@@ -39,36 +38,26 @@ public class SearchAllActivity extends AppCompatActivity {
     TextView CallUsTxtBack;
     @BindView(R.id.toggle)
     RadioGroup toggle;
-
-    private RadioButton radioButton;
+    @BindView(R.id.calm1)
+    RadioButton calm1;
+    @BindView(R.id.calm2)
+    RadioButton calm2;
+    @BindView(R.id.calm3)
+    RadioButton calm3;
+    @BindView(R.id.calm4)
+    RadioButton calm4;
 
     // var
     private SearchAllAdapter mSearchAllAdapter;
     public static List<SearchAllResponse> mSearchAllList;
     private SVProgressHUD mProgress;
 
-    public void chickButton(View view){
-        int radioId = toggle.getCheckedRadioButtonId();
-        switch (radioId){
-            case R.id.calm1:
-                Toast.makeText(this, "التشريعات", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.calm2:
-                Toast.makeText(this, "النقض", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.calm3:
-                Toast.makeText(this, "قيود واوصاف", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.calm4:
-                Toast.makeText(this, "العملية", Toast.LENGTH_SHORT).show();
-                break;
-        }
-//        radioButton.findViewById(radioId);
-  //      Toast.makeText(this, radioButton.getText(), Toast.LENGTH_SHORT).show();
-    }
+    private String searchText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
         setContentView(R.layout.activity_search_all);
         ButterKnife.bind(this);
         setViewsTypeface();
@@ -77,8 +66,8 @@ public class SearchAllActivity extends AppCompatActivity {
         mProgress = new SVProgressHUD(this);
         mProgress.show();
 
-        String tex = getIntent().getStringExtra("search_text");
-        searchAll(tex, 1, "3");
+        searchText = getIntent().getStringExtra("search_text");
+        searchAll(searchText, 1, "1");
     }
 
     private void initRecyclerView(final List<SearchAllResponse> searchAllList) {
@@ -92,35 +81,18 @@ public class SearchAllActivity extends AppCompatActivity {
                     public void setOnItemClicked(int position) {
                         SearchAllResponse searchAllResponse = searchAllList.get(position);
 
-                        Intent intent = new Intent(SearchAllActivity.this, DetailsSearchAhkamActivity.class);
+                        Intent intent = new Intent(SearchAllActivity.this, DetailsSearchAllActivity.class);
                         intent.putExtra("position", position);
+                        intent.putExtra("searchText", searchText);
+                        intent.putExtra("url", searchAllResponse.getUrl());
                         startActivity(intent);
-
-//                        Toast.makeText(SearchAllActivity.this, "" + searchAllResponse.getId()
-//                                , Toast.LENGTH_SHORT).show();
                     }
                 });
         RVSearchAll.setAdapter(mSearchAllAdapter);
     }
 
-    @OnClick({R.id.homeclick, R.id.backclik})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.homeclick:
-                openActivity(HomeActivity.class);
-                break;
-            case R.id.backclik:
-                finish();
-                break;
-        }
-    }
-
-    private void openActivity(Class<?> cls) {
-        Intent intent = new Intent(SearchAllActivity.this, cls);
-        startActivity(intent);
-    }
-
     private void searchAll(String word, int page, String tb_index) {
+        mSearchAllList.clear();
         APIManager.getApis().searchAll(word, page, tb_index)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -135,22 +107,60 @@ public class SearchAllActivity extends AppCompatActivity {
                         mProgress.dismiss();
                         mSearchAllList.addAll(searchAllResponses);
                         initRecyclerView(mSearchAllList);
-                        Toast.makeText(SearchAllActivity.this, "Siz" + mSearchAllList.size(),
-                                Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         mProgress.dismiss();
                         Util.showWarrning(SearchAllActivity.this, e.getLocalizedMessage());
-//                        Toast.makeText(SearchAllActivity.this, "Oops Error: \n"
-//                                + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
                 });
+    }
+
+    public void chickButton(View view) {
+        int radioId = toggle.getCheckedRadioButtonId();
+        switch (radioId) {
+            case R.id.calm1:
+                mProgress.show();
+                searchAll(searchText, 1, "1");
+                // التشريعات
+                break;
+            case R.id.calm2:
+                mProgress.show();
+                // النقض
+                searchAll(searchText, 1, "3");
+                break;
+            case R.id.calm3:
+                mProgress.show();
+                searchAll(searchText, 1, "4");
+                // قيود واوصاف
+                break;
+            case R.id.calm4:
+                mProgress.show();
+                searchAll(searchText, 1, "5");
+                // العملية
+                break;
+        }
+    }
+
+       @OnClick({R.id.homeclick, R.id.backclik})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.homeclick:
+                Util.openActivity(this, HomeActivity.class);
+                break;
+            case R.id.backclik:
+                finish();
+                break;
+        }
     }
 
     private void setViewsTypeface() {
         Util.setViewsTypeface(this, txtTitel);
         Util.setViewsTypeface(this, CallUsTxtBack);
+        Util.setViewsTypeface(this, calm1);
+        Util.setViewsTypeface(this, calm2);
+        Util.setViewsTypeface(this, calm3);
+        Util.setViewsTypeface(this, calm4);
     }
 }

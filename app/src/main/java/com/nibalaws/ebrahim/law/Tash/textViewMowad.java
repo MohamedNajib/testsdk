@@ -34,6 +34,7 @@ import com.nibalaws.ebrahim.law.DataBaseManger.MyAdapter;
 import com.nibalaws.ebrahim.law.DataBaseManger.Var;
 import com.nibalaws.ebrahim.law.HomeActivity;
 import com.nibalaws.ebrahim.law.R;
+import com.nibalaws.ebrahim.law.util.Util;
 
 import java.util.ArrayList;
 
@@ -78,6 +79,7 @@ public class textViewMowad extends Activity implements GestureOverlayView.OnGest
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
         //setContentView(R.layout.txt);
         setContentView(R.layout.layout_articles);
         ButterKnife.bind(this);
@@ -134,6 +136,7 @@ public class textViewMowad extends Activity implements GestureOverlayView.OnGest
             titelTxt = (TextView) findViewById(R.id.txtTitel);
             Typeface type = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
             txt_back.setTypeface(type);
+
             //bt.setTypeface(type);
 
             textArtTitle.setText(ArrayTXt.get(index).getItem8().toString().replace("null", "").replaceAll("(?m)^[ \t]*\r?\n", ""));

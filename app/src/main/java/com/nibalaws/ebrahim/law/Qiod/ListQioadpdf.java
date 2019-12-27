@@ -20,19 +20,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
+import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
+import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
+import com.nibalaws.ebrahim.law.HomeActivity;
+import com.nibalaws.ebrahim.law.R;
+import com.nibalaws.ebrahim.law.util.Util;
+import com.nibalaws.ebrahim.law.webview;
 
 import java.util.ArrayList;
 
-import com.nibalaws.ebrahim.law.HomeActivity;
-import com.nibalaws.ebrahim.law.R;
-import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
-import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
-
-import com.nibalaws.ebrahim.law.webview;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ListQioadpdf extends AppCompatActivity implements SearchView.OnQueryTextListener {
     public static int lstindx;
     public static String titlname;
+    @BindView(R.id.FavoriteTxtBack)
+    TextView FavoriteTxtBack;
     private SVProgressHUD mSVProgressHUD;
     int progress = 0;
     private ListView lv;
@@ -44,22 +48,25 @@ public class ListQioadpdf extends AppCompatActivity implements SearchView.OnQuer
     public static ArrayList<Master_Stract> fillterArray = new ArrayList<>();
     private Boolean ISsEARCHING = false;
 
-    DatabaseHelper db ;
+    DatabaseHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
 //        setContentView(R.layout.itemlist);
         setContentView(R.layout.layout_favorite);
+        ButterKnife.bind(this);
+        Util.setViewsTypeface(this, FavoriteTxtBack);
         sv = (SearchView) findViewById(R.id.search_view);
         lv = (ListView) findViewById(R.id.lstContact);
         mSVProgressHUD = new SVProgressHUD(this);
-        db =  new DatabaseHelper(this);
+        db = new DatabaseHelper(this);
         titelTxt = (TextView) findViewById(R.id.txtTitel);
         Typeface type = Typeface.createFromAsset(getAssets(), "NG4ASANS-REGULAR.TTF");
         titelTxt.setText(titlname);
         titelTxt.setTypeface(type);
-         adapter = new CustomAdapter(getApplicationContext(), Master_Array);
+        adapter = new CustomAdapter(getApplicationContext(), Master_Array);
         sv.setOnQueryTextListener(this);
         lv.setAdapter(adapter);
         sv.setOnQueryTextListener(this);
@@ -69,15 +76,15 @@ public class ListQioadpdf extends AppCompatActivity implements SearchView.OnQuer
 
                 try {
 
-                    lstindx = position ;
-                    new ViewTxt().execute() ;
+                    lstindx = position;
+                    new ViewTxt().execute();
 
                 } catch (Exception e) {
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-        ImageView homeclick= (ImageView) findViewById(R.id.homeclick);
+        ImageView homeclick = (ImageView) findViewById(R.id.homeclick);
         homeclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -89,7 +96,7 @@ public class ListQioadpdf extends AppCompatActivity implements SearchView.OnQuer
 
             }
         });
-        ImageView backclick= (ImageView) findViewById(R.id.backclik);
+        ImageView backclick = (ImageView) findViewById(R.id.backclik);
         backclick.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,7 +105,7 @@ public class ListQioadpdf extends AppCompatActivity implements SearchView.OnQuer
 
             }
         });
-        sv.setOnClickListener(  new View.OnClickListener() {
+        sv.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -186,7 +193,7 @@ public class ListQioadpdf extends AppCompatActivity implements SearchView.OnQuer
 
 
         private class ValueFilter extends Filter {
-             @Override
+            @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
                 String Ser = constraint.toString();
@@ -232,16 +239,15 @@ public class ListQioadpdf extends AppCompatActivity implements SearchView.OnQuer
     }
 
 
+    Intent intent;
 
-
-    Intent intent ;
-     private class ViewTxt extends AsyncTask<Void, Void, String> {
+    private class ViewTxt extends AsyncTask<Void, Void, String> {
         protected String doInBackground(Void... params) {
             try {
 
-                 intent = new Intent(ListQioadpdf.this, webview.class);
-               //   webview.web_url =  Master_Array.get(lstindx).getItem2();
-                webview.web_index = "2" ;
+                intent = new Intent(ListQioadpdf.this, webview.class);
+                //   webview.web_url =  Master_Array.get(lstindx).getItem2();
+                webview.web_index = "2";
 
                 startActivity(intent);
 
@@ -252,26 +258,28 @@ public class ListQioadpdf extends AppCompatActivity implements SearchView.OnQuer
 
         }
 
-         @Override
+        @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             try {
                 mSVProgressHUD.dismiss();
                 super.onPostExecute(result);
-                  startActivity(intent);
+                startActivity(intent);
 
-            }catch (Exception e) {
-                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();}
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
 
         }
-         @Override
+
+        @Override
         protected void onPreExecute() {
             mSVProgressHUD.show();
         }
 
 
-
     }
+
     protected void onPause() {
         // Whenever this activity is paused (i.e. looses focus because another activity is started etc)
         // Override how this activity is animated out of view

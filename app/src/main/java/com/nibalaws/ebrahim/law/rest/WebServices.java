@@ -6,6 +6,7 @@ import com.nibalaws.ebrahim.law.rest.apiModel.GetNotificationsResponse;
 import com.nibalaws.ebrahim.law.rest.apiModel.Search;
 import com.nibalaws.ebrahim.law.rest.apiModel.SearchAhkamResponse;
 import com.nibalaws.ebrahim.law.rest.apiModel.SearchAllResponse;
+import com.nibalaws.ebrahim.law.rest.apiModel.SearchResponse;
 import com.nibalaws.ebrahim.law.rest.apiModel.SearchTashResponse;
 
 import java.util.List;
@@ -59,10 +60,10 @@ public interface WebServices {
 
     @POST("Searchniba")
     @FormUrlEncoded
-    Single<List<Search>> SearchNiba(@Field("Word") String word,
-                                    @Field("Search_type") String Search_type,
-                                    @Field("Type_ids") String Type_ids,
-                                    @Field("page") int page);
+    Single<List<SearchResponse>> SearchNiba(@Field("Word") String word,
+                                            @Field("Search_type") String Search_type,
+                                            @Field("Type_ids") String Type_ids,
+                                            @Field("page") int page);
 
     @POST("SearchHithiat")
     @FormUrlEncoded

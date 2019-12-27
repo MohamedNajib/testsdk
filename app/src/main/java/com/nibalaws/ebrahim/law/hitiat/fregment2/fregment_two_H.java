@@ -28,6 +28,7 @@ import com.nibalaws.ebrahim.law.R;
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
 import com.nibalaws.ebrahim.law.hitiat.textViewHithiat;
+import com.nibalaws.ebrahim.law.util.Util;
 
 public class fregment_two_H extends Fragment implements SearchView.OnQueryTextListener {
     TextView txt ;
@@ -44,7 +45,7 @@ public class fregment_two_H extends Fragment implements SearchView.OnQueryTextLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        Util.setLocaleAr(getActivity());
         return inflater.inflate(R.layout.fregmentlist, container, false);
 
     }

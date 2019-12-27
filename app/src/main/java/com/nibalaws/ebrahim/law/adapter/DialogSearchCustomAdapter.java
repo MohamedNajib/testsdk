@@ -98,6 +98,12 @@ public class DialogSearchCustomAdapter extends ArrayAdapter<DialogSearchDataMode
             viewHolder.RelativeLayoutItem.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         }
 
+//        boolean i = true;
+//        if (position == modelList.size()){
+//            DialogSearchDataModel dataModel = new DialogSearchDataModel("اختيار الكل", "", i);
+//                    modelList.add(dataModel);
+//        }
+
 
         return result;
     }

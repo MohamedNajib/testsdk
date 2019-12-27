@@ -10,10 +10,12 @@ import android.widget.Toast;
 
 import com.nibalaws.ebrahim.law.rest.APIManager;
 import com.nibalaws.ebrahim.law.rest.apiModel.GetNotificationsResponse;
+import com.nibalaws.ebrahim.law.util.Util;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.SingleObserver;
@@ -23,18 +25,34 @@ import io.reactivex.schedulers.Schedulers;
 
 public class GetNotificationsActivity extends AppCompatActivity {
 
+    @BindView(R.id.EgyptTash_back_txt)
+    TextView EgyptTashBackTxt;
+    @BindView(R.id.txtTitel)
+    TextView txtTitel;
+
     private ImageView IV_Notification;
     private TextView TV_NotificationTitle, TV_NotificationDescription;
+
+    private void setViewsTypeface() {
+        Util.setViewsTypeface(this, txtTitel);
+        Util.setViewsTypeface(this, TV_NotificationTitle);
+        Util.setViewsTypeface(this, TV_NotificationDescription);
+        Util.setViewsTypeface(this, EgyptTashBackTxt);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
         setContentView(R.layout.activity_get_notifications);
         ButterKnife.bind(this);
 
         IV_Notification = findViewById(R.id.IV_Notification);
         TV_NotificationTitle = findViewById(R.id.TV_NotificationTitle);
         TV_NotificationDescription = findViewById(R.id.TV_NotificationDescription);
+
+        setViewsTypeface();
 
         loadNotifications();
     }
@@ -70,7 +88,7 @@ public class GetNotificationsActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.homeclick:
-                openActivity(HomeActivity.class);
+                Util.openActivity(this, HomeActivity.class);
                 break;
             case R.id.backclik:
                 finish();
@@ -78,8 +96,4 @@ public class GetNotificationsActivity extends AppCompatActivity {
         }
     }
 
-    private void openActivity(Class<?> cls) {
-        Intent intent = new Intent(GetNotificationsActivity.this, cls);
-        startActivity(intent);
-    }
 }

@@ -1,5 +1,6 @@
 package com.nibalaws.ebrahim.law;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,6 +18,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -28,6 +30,7 @@ import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
 import com.nibalaws.ebrahim.law.adapter.DialogSearchCustomAdapter;
+import com.nibalaws.ebrahim.law.adapter.SearchApiAhkamAdapter;
 import com.nibalaws.ebrahim.law.adapter.SearchLocaleAhkamAdapter;
 import com.nibalaws.ebrahim.law.rest.APIManager;
 import com.nibalaws.ebrahim.law.rest.DialogSearchDataModel;
@@ -36,6 +39,7 @@ import com.nibalaws.ebrahim.law.rest.apiModel.SearchAhkamResponse;
 import com.nibalaws.ebrahim.law.util.Util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -46,7 +50,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class SearchAhkamActivity extends AppCompatActivity {
+public class SearchAhkamActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     @BindView(R.id.localeAhkamRV)
     RecyclerView localeAhkamRV;
@@ -93,9 +97,9 @@ public class SearchAhkamActivity extends AppCompatActivity {
     @BindView(R.id.Hkm_Year_To)
     EditText HkmYearTo;
     @BindView(R.id.date_from)
-    EditText DateFrom;
+    TextView DateFrom;
     @BindView(R.id.date_To)
-    EditText DateTo;
+    TextView DateTo;
     @BindView(R.id.Office_from)
     EditText OfficeFrom;
     @BindView(R.id.Office_To)
@@ -119,6 +123,7 @@ public class SearchAhkamActivity extends AppCompatActivity {
     @BindView(R.id.court_place)
     EditText CourtPlace;
 
+
     private ArrayList<DialogSearchDataModel> dataModels;
     private DialogSearchCustomAdapter adapter;
     private List<String> listOfIds;
@@ -136,17 +141,27 @@ public class SearchAhkamActivity extends AppCompatActivity {
     private int backState = 0;
     private SearchLocaleAhkamAdapter searchTashAdapter;
 
+    private boolean mButtonState;
+    private String state;
+    private boolean date;
+
+    private SearchApiAhkamAdapter mSearchApiAhkamAdapter;
+    public static List<SearchAhkamResponse> searchAhkamList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
         setContentView(R.layout.activity_search_ahkam);
         ButterKnife.bind(this);
         ScrollViewAhkam.setVisibility(View.VISIBLE);
         localeAhkamRV.setVisibility(View.GONE);
         txtTitel.setText("بحث مخصص");
 
+        state = getIntent().getStringExtra("state");
         setViewsTypeface();
         mProgress = new SVProgressHUD(this);
+        searchAhkamList = new ArrayList<>();
 
         databaseHelper = new DatabaseHelper(this);
         master_stracts = new ArrayList<>();
@@ -161,7 +176,29 @@ public class SearchAhkamActivity extends AppCompatActivity {
         listOfIds = new ArrayList<>();
         listOfType = new ArrayList<>();
         dataModels = databaseHelper.gettypeDialogSearchAhkam();
+        dataModels.add(new DialogSearchDataModel("اختيار الكل", "1000", false));
+    }
 
+    @OnClick({R.id.date_from, R.id.date_To})
+    public void onDateViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.date_from:
+                date = true;
+                showDatePickerDialog();
+                break;
+            case R.id.date_To:
+                date = false;
+                showDatePickerDialog();
+                break;
+        }
+    }
+
+    public void showDatePickerDialog() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(SearchAhkamActivity.this, this,
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
     }
 
     @Override
@@ -200,28 +237,34 @@ public class SearchAhkamActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(List<SearchAhkamResponse> searchAhkamResponses) {
                         mProgress.dismiss();
-                        for (int i = 0; i < searchAhkamResponses.size(); i++) {
+                        searchAhkamList.addAll(searchAhkamResponses);
+                        mSearchApiAhkamAdapter = new SearchApiAhkamAdapter(SearchAhkamActivity.this,
+                                searchAhkamList, new SearchApiAhkamAdapter.OnItemClick() {
+                            @Override
+                            public void setOnItemClicked(int position) {
+                                SearchAhkamResponse searchAhkamResponse = searchAhkamList.get(position);
+                                Intent intent = new Intent(SearchAhkamActivity.this, DetailsSearchAhkamActivity.class);
+                                intent.putExtra("position", position);
+                                intent.putExtra("state", mButtonState);
+                                intent.putExtra("url", searchAhkamResponse.getUrl());
+                                startActivity(intent);
+                                Toast.makeText(SearchAhkamActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+                            }
+                        });
 
-                            master_stracts.add(new Master_Stract(searchAhkamResponses.get(i).getId(),
-                                    searchAhkamResponses.get(i).getInfo(), searchAhkamResponses.get(i).getUrl(),
-                                    "", "", "", "", ""));
-                        }
-                        //searchTashAdapter = new SearchLocaleTashAdapter(master_stracts);
-                        localeAhkamRV.setAdapter(searchTashAdapter);
+                        localeAhkamRV.setAdapter(mSearchApiAhkamAdapter);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         mProgress.dismiss();
-                        Toast.makeText(SearchAhkamActivity.this, "Oops Error: \n"
-                                + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                        Util.showWarrning(SearchAhkamActivity.this, e.getLocalizedMessage());
                     }
                 });
     }
 
     @OnClick(R.id.BTN_SearchAhkam)
     public void onViewClicked() {
-        //getUserSearchInput();
         isValidInput();
     }
 
@@ -239,8 +282,9 @@ public class SearchAhkamActivity extends AppCompatActivity {
                 master_stracts, new SearchLocaleAhkamAdapter.OnItemClick() {
             @Override
             public void setOnItemClicked(int position) {
-                Intent intent = new Intent(SearchAhkamActivity.this, DetailsSearchAll.class);
+                Intent intent = new Intent(SearchAhkamActivity.this, DetailsSearchAhkamActivity.class);
                 intent.putExtra("position", position);
+                intent.putExtra("state", mButtonState);
                 startActivity(intent);
                 Toast.makeText(SearchAhkamActivity.this, "" + position, Toast.LENGTH_SHORT).show();
             }
@@ -271,9 +315,9 @@ public class SearchAhkamActivity extends AppCompatActivity {
 //        localeAhkamRV.addOnScrollListener(mOnEndless);
 //        localeAhkamRV.setAdapter(searchTashAdapter);
 
-//        SearchAhkam(hkmNumFrom, hkmNumTo, officeFrom, officeTo, pageFrom, pageTo, partFrom, partTo, court_sys,
-//                court_place, getTypeIds(listOfIds),
-//                dateFrom, dateTo, word, "", 1, hkmYearFrom, hkmYearTo);
+        SearchAhkam(hkmNumFrom, hkmNumTo, officeFrom, officeTo, pageFrom, pageTo, partFrom, partTo, court_sys,
+                court_place, getTypeIds(listOfIds),
+                dateFrom, dateTo, word, "", 1, hkmYearFrom, hkmYearTo);
     }
 
     private void isValidInput() {
@@ -282,10 +326,12 @@ public class SearchAhkamActivity extends AppCompatActivity {
                 && !InputValidation.emptyInput(OfficeFrom) && !InputValidation.emptyInput(OfficeTo)
                 && !InputValidation.emptyInput(PageFrom) && !InputValidation.emptyInput(PageTo)
                 && !InputValidation.emptyInput(PartFrom) && !InputValidation.emptyInput(PartTo)
-                && !InputValidation.emptyInput(DateFrom) && !InputValidation.emptyInput(DateTo)
+                //&& !InputValidation.emptyInput(DateFrom) && !InputValidation.emptyInput(DateTo)
                 && !InputValidation.emptyInput(HkmYearFrom) && !InputValidation.emptyInput(HkmYearTo)
                 && getTypeIds(listOfType).trim().isEmpty()) {
             Toast.makeText(this, "No Data", Toast.LENGTH_SHORT).show();
+        } else if (getTypeIds(listOfIds).trim().isEmpty()) {
+            Toast.makeText(this, "قم باختيار المحكمة", Toast.LENGTH_SHORT).show();
         } else {
             court_sys = CourtSys.getText().toString();
             court_place = CourtPlace.getText().toString();
@@ -353,10 +399,26 @@ public class SearchAhkamActivity extends AppCompatActivity {
                 hkmYearTo = hkmYear;
             }
 
-            mProgress.show();
+//            if (mButtonState) {
+//                mProgress.show();
+//                apiSearch();
+//            } else {
+//                mProgress.show();
+//                localeSearch();
+//            }
 
+            if (state.equals("OnLine")) {
+                mButtonState = true;
+                mProgress.show();
+                apiSearch();
+
+            } else if (state.equals("OfLine")) {
+                mButtonState = false;
+                mProgress.show();
+                localeSearch();
+            }
             //apiSearch();
-            localeSearch();
+            //localeSearch();
         }
     }
 
@@ -404,13 +466,44 @@ public class SearchAhkamActivity extends AppCompatActivity {
                 dataModel.checked = !dataModel.checked;
                 adapter.notifyDataSetChanged();
 
+
                 if (dataModel.isChecked()) {
-                    listOfIds.add(dataModel.getId());
-                    listOfType.add(dataModel.getName());
+                    if (dataModel.getId().equals("1000")){
+                        listOfIds.clear();
+                        listOfType.clear();
+                        for (DialogSearchDataModel model : dataModels){
+                            model.setChecked(true);
+                            listOfIds.add(model.getId());
+                            listOfType.add(model.getName());
+                            adapter.notifyDataSetChanged();
+                        }
+                        listOfIds.remove(listOfIds.size() - 1);
+                    }else {
+                        listOfIds.add(dataModel.getId());
+                        listOfType.add(dataModel.getName());
+                    }
+
                 } else {
-                    listOfIds.remove(dataModel.getId());
-                    listOfType.remove(dataModel.getName());
+                    if (dataModel.getId().equals("1000")){
+                        for (DialogSearchDataModel model : dataModels){
+                            model.setChecked(false);
+                            listOfIds.remove(model.getId());
+                            listOfType.remove(model.getName());
+                            adapter.notifyDataSetChanged();
+                        }
+                    }else {
+                        listOfIds.remove(dataModel.getId());
+                        listOfType.remove(dataModel.getName());
+                    }
                 }
+
+//                if (dataModel.isChecked()) {
+//                    listOfIds.add(dataModel.getId());
+//                    listOfType.add(dataModel.getName());
+//                } else {
+//                    listOfIds.remove(dataModel.getId());
+//                    listOfType.remove(dataModel.getName());
+//                }
 
                 Toast.makeText(SearchAhkamActivity.this, getTypeIds(listOfIds), Toast.LENGTH_SHORT).show();
 
@@ -531,5 +624,39 @@ public class SearchAhkamActivity extends AppCompatActivity {
         Util.setViewsTypeface(this, tt11);
         Util.setViewsTypeface(this, CourtPlace);
         Util.setViewsTypeface(this, BTNSearchAhkam);
+    }
+
+
+    @OnClick(R.id.deleteInput)
+    public void onDeleteInputClicked() {
+        Word.setText("");
+        HkmNumFrom.setText("");
+        HkmNumTo.setText("");
+        HkmYearFrom.setText("");
+        HkmYearTo.setText("");
+        Word.setText("");
+        DateFrom.setText("");
+        DateTo.setText("");
+        OfficeFrom.setText("");
+        OfficeTo.setText("");
+        RuleFrom.setText("");
+        RuleTo.setText("");
+        PartFrom.setText("");
+        PartTo.setText("");
+        PageFrom.setText("");
+        PageTo.setText("");
+        CourtSys.setText("");
+        CourtPlace.setText("");
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+        if (date){
+            dateFrom = month + "/" + dayOfMonth + "/" + year;
+            DateFrom.setText(dateFrom);
+        }else {
+            dateTo = month + "/" + dayOfMonth + "/" + year;
+            DateTo.setText(dateTo);
+        }
     }
 }

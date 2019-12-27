@@ -35,7 +35,12 @@
         android:testOnly="false"
         android:theme="@style/MyMaterialTheme.Base"
         tools:ignore="HardcodedDebugMode">
-        <activity android:name=".SearchAllActivity"></activity>
+        <activity android:name=".WebViewActivity"></activity>
+        <activity android:name=".DetailsSearchNiabhActivity" />
+        <activity android:name=".SearchnibaActivity" />
+        <activity android:name=".SearchHithiatActivity" />
+        <activity android:name=".DetailsSearchTashActivity" />
+        <activity android:name=".SearchAllActivity" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".SearchTashActivity" />
         <activity android:name=".SearchAhkamActivity" />
@@ -51,15 +56,12 @@
         <activity android:name=".homelist" />
         <activity android:name=".contactus" />
         <activity android:name=".ListFav" />
-        <activity android:name=".search.searchAll" />
         <activity android:name=".Qiod.ListQioadpdf" />
         <activity android:name=".webBr" />
         <activity android:name=".ahkam.Nkd_Master" />
         <activity android:name=".hitiat.Hitiat_Master" />
         <activity android:name=".tashri3info" />
         <activity android:name=".webview" />
-        <activity android:name=".search.searchAhkam" />
-        <activity android:name=".search.searchTash" />
         <activity android:name=".Qiod.ListQioad" />
         <activity android:name=".hitiat.ListHithiat" />
         <activity android:name=".hitiat.textViewHithiat" />
@@ -75,17 +77,13 @@
         <activity android:name=".Tash.Tashedit" />
         <activity android:name=".Tash.Tashlai7a" />
         <activity android:name=".Tash.Tashahkambymda" />
-        <activity android:name=".search.ListAhkamSearch" />
-        <activity android:name=".search.ListtashSearch" />
-        <activity android:name=".search.Tashmowadsearch" />
         <activity android:name=".Tash.textViewMowad" />
         <activity android:name=".ahkam.textViewahkam" />
-        <activity android:name=".Tanshet" />
         <activity android:name=".notification.Show_massege" />
         <activity android:name=".Qiod.textView" />
-        <activity android:name=".Ssssss"></activity>
-        <activity android:name=".DetailsSearchAll" />
+        <activity android:name=".Ssssss" />
         <activity android:name=".DetailsSearchAhkamActivity" />
+        <activity android:name=".DetailsSearchAllActivity" />
 
         <service android:name=".notification.MyFirebaseMessagingService">
             <intent-filter>

@@ -1,8 +1,11 @@
 package com.nibalaws.ebrahim.law;
 
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +17,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -21,9 +25,12 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.balsikandar.crashreporter.CrashReporter;
+import com.bigkoo.svprogresshud.SVProgressHUD;
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.DataBaseManger.Master_Stract;
 import com.nibalaws.ebrahim.law.adapter.DialogSearchCustomAdapter;
+import com.nibalaws.ebrahim.law.adapter.SearchApiTashAdapter;
 import com.nibalaws.ebrahim.law.adapter.SearchLocaleTashAdapter;
 import com.nibalaws.ebrahim.law.rest.APIManager;
 import com.nibalaws.ebrahim.law.rest.DialogSearchDataModel;
@@ -32,6 +39,7 @@ import com.nibalaws.ebrahim.law.rest.apiModel.SearchTashResponse;
 import com.nibalaws.ebrahim.law.util.Util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,7 +50,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class SearchTashActivity extends AppCompatActivity {
+public class SearchTashActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     @BindView(R.id.localeRV)
     RecyclerView localeRV;
@@ -79,11 +87,13 @@ public class SearchTashActivity extends AppCompatActivity {
     @BindView(R.id.Tash_year_to)
     EditText TashYearTo;
     @BindView(R.id.date_from)
-    EditText DateFrom;
+    TextView DateFrom;
     @BindView(R.id.date_to)
-    EditText DateTo;
+    TextView DateTo;
     @BindView(R.id.Type_ids)
     TextView TypeIds;
+    @BindView(R.id.ttt)
+    TextView ttt;
 
 
     private DatabaseHelper databaseHelper;
@@ -94,19 +104,46 @@ public class SearchTashActivity extends AppCompatActivity {
 
     private int backState = 0;
 
-    private ArrayList<Master_Stract> master_stracts;
+    public static ArrayList<Master_Stract> master_stracts;
     private SearchLocaleTashAdapter searchTashAdapter;
 
     private String tashNoFrom, tashNoTo, tashYearFrom, tashYearTo, dateFrom, dateTo;
     private String tashName, word;
 
+    private boolean mButtonState;
+    public static List<SearchTashResponse> mSearchTashList;
+    private SearchApiTashAdapter searchApiTashAdapter;
+
+    private SVProgressHUD mProgress;
+
+    private String state;
+
+    @OnClick(R.id.deleteInput)
+    public void onDeleteInputClicked() {
+        TashName.setText("");
+        Word.setText("");
+        TashNoFrom.setText("");
+        TashNoTo.setText("");
+        TashYearFrom.setText("");
+        TashYearTo.setText("");
+        DateFrom.setText("");
+        DateTo.setText("");
+    }
+
+    private boolean date;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Util.setLocaleAr(this);
         setContentView(R.layout.activity_search_tash);
         ButterKnife.bind(this);
         scrollView3.setVisibility(View.VISIBLE);
         localeRV.setVisibility(View.GONE);
+        mProgress = new SVProgressHUD(this);
+        mSearchTashList = new ArrayList<>();
+
+        state = getIntent().getStringExtra("state");
 
         txtTitel.setText("بحث مخصص");
         setViewsTypeface();
@@ -121,6 +158,7 @@ public class SearchTashActivity extends AppCompatActivity {
         listOfIds = new ArrayList<>();
         listOfType = new ArrayList<>();
         dataModels = databaseHelper.gettypeDialogSearch();
+        dataModels.add(new DialogSearchDataModel("اختيار الكل", "1000", false));
 
         master_stracts = new ArrayList<>();
     }
@@ -139,7 +177,7 @@ public class SearchTashActivity extends AppCompatActivity {
     }
 
     private void SearchTash(String tashNoFrom, String tashNoTo, String tashYearFrom, String tashYearTo, String dateFrom,
-                            String dateTo, String typeIds, String word, String searchType, String tashName, int page) {
+                            String dateTo, String typeIds, String word, String searchType, String tashName, final int page) {
 
         scrollView3.setVisibility(View.GONE);
         localeRV.setVisibility(View.VISIBLE);
@@ -156,58 +194,142 @@ public class SearchTashActivity extends AppCompatActivity {
 
                     @Override
                     public void onSuccess(List<SearchTashResponse> searchTashResponses) {
-                        for (int i = 0; i < searchTashResponses.size(); i++) {
+                        mProgress.dismiss();
+                        mSearchTashList.addAll(searchTashResponses);
 
-                            master_stracts.add(new Master_Stract(searchTashResponses.get(i).getId(),
-                                    searchTashResponses.get(i).getInfo(), searchTashResponses.get(i).getEditUrl(),
-                                    searchTashResponses.get(i).getPicUrl(), searchTashResponses.get(i).getEditUrl(),
-                                    searchTashResponses.get(i).getLai7aUrl(), searchTashResponses.get(i).getMdaTit(),
-                                    searchTashResponses.get(i).getMdaId()));
-                        }
-
-                        searchTashAdapter = new SearchLocaleTashAdapter(master_stracts);
-                        localeRV.setAdapter(searchTashAdapter);
+                        searchApiTashAdapter = new SearchApiTashAdapter(SearchTashActivity.this,
+                                mSearchTashList, new SearchApiTashAdapter.OnItemClick() {
+                            @Override
+                            public void setOnItemClicked(int position) {
+                                SearchTashResponse searchTashResponse = mSearchTashList.get(position);
+                                Intent intent = new Intent(SearchTashActivity.this, DetailsSearchTashActivity.class);
+                                intent.putExtra("position", position);
+                                intent.putExtra("state", mButtonState);
+                                intent.putExtra("url", searchTashResponse.getUrl());
+                                startActivity(intent);
+                            }
+                        });
+                        localeRV.setAdapter(searchApiTashAdapter);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Toast.makeText(SearchTashActivity.this, "Oops Error: \n"
-                                + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                        mProgress.dismiss();
+                        Util.showWarrning(SearchTashActivity.this, e.getLocalizedMessage());
                     }
                 });
     }
 
-
-    private void searchLocaleTash() {
-        backState = 1;
-        txtTitel.setText("نتيجة البحث");
-
-        if (word.trim() != null && !word.trim().isEmpty()) {
-            master_stracts = databaseHelper.SearchTash(tashNoFrom, tashNoTo,
-                    tashYearFrom, tashYearTo, getTypeIds(listOfIds), dateFrom, dateTo, 1,
-                    word, tashName);
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
+        if (date) {
+            dateFrom = month + "/" + dayOfMonth + "/" + year;
+            DateFrom.setText(dateFrom);
         } else {
-            master_stracts = databaseHelper.SearchTash(tashNoFrom, tashNoTo,
-                    tashYearFrom, tashYearTo, getTypeIds(listOfIds), dateFrom, dateTo, 0,
-                    word, tashName);
+            dateTo = month + "/" + dayOfMonth + "/" + year;
+            DateTo.setText(dateTo);
         }
-        scrollView3.setVisibility(View.GONE);
-        localeRV.setVisibility(View.VISIBLE);
-
-        searchTashAdapter = new SearchLocaleTashAdapter(master_stracts);
-        localeRV.setAdapter(searchTashAdapter);
     }
 
-    private void getUserSearchInput() {
-        SearchTash(tashNoFrom, tashNoTo, tashYearFrom, tashYearTo, dateFrom, dateTo,
-                getTypeIds(listOfIds), word, "", tashName, 1);
+    @OnClick({R.id.date_from, R.id.date_to})
+    public void onDateViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.date_from:
+                date = true;
+                showDatePickerDialog();
+                break;
+            case R.id.date_to:
+                date = false;
+                showDatePickerDialog();
+                break;
+        }
+    }
+
+    public void showDatePickerDialog() {
+        DatePickerDialog datePickerDialog = new DatePickerDialog(SearchTashActivity.this, this,
+                Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        datePickerDialog.show();
+    }
+
+
+    private class SeachLoacalTask extends AsyncTask<Void, Void, String> {
+        protected String doInBackground(Void... params) {
+
+
+            String IDs = "(" + getTypeIds(listOfIds) + ")";
+
+            if (word.trim() != null && !word.trim().isEmpty()) {
+                master_stracts = databaseHelper.SearchTash(tashNoFrom, tashNoTo,
+                        tashYearFrom, tashYearTo, IDs, dateFrom, dateTo, 1,
+                        word, tashName);
+            } else {
+                master_stracts = databaseHelper.SearchTash(tashNoFrom, tashNoTo,
+                        tashYearFrom, tashYearTo, IDs, dateFrom, dateTo, 0,
+                        word, tashName);
+            }
+            return null;
+        }
+
+        Intent intent;
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            try {
+                mProgress.dismiss();
+                super.onPostExecute(result);
+                backState = 1;
+                txtTitel.setText("نتيجة البحث");
+
+                scrollView3.setVisibility(View.GONE);
+                localeRV.setVisibility(View.VISIBLE);
+
+                Toast.makeText(SearchTashActivity.this, tashName, Toast.LENGTH_SHORT).show();
+                searchTashAdapter = new SearchLocaleTashAdapter(SearchTashActivity.this,
+                        master_stracts, word, new SearchLocaleTashAdapter.OnItemClick() {
+                    @Override
+                    public void setOnItemClicked(int position) {
+                        Toast.makeText(SearchTashActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                localeRV.setAdapter(searchTashAdapter);
+
+
+            } catch (Exception e) {
+                CrashReporter.logException(e);
+            }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            mProgress.show();
+        }
+    }
+
+
+    private void searchLocaleTash() {
+        new SeachLoacalTask().execute();
+
+    }
+
+    private void searchApi() {
+//        if (!word.trim().isEmpty()) {
+//            SearchTash(tashNoFrom, tashNoTo, tashYearFrom, tashYearTo, dateFrom, dateTo,
+//                    getTypeIds(listOfIds), word, "1", tashName, 1);
+//        }else {
+//            SearchTash(tashNoFrom, tashNoTo, tashYearFrom, tashYearTo, dateFrom, dateTo,
+//                    getTypeIds(listOfIds), word, "0", tashName, 1);
+//        }
+
+        SearchTash("58", "58", "", "", "", "",
+                "", word, "0", "قانون العقوبات", 1);
     }
 
 
     @OnClick(R.id.BTN_SearchTash)
     public void onViewClicked() {
-        //getUserSearchInput();
-
         isValidInput();
     }
 
@@ -215,9 +337,12 @@ public class SearchTashActivity extends AppCompatActivity {
         if (!InputValidation.emptyInput(TashName) && !InputValidation.emptyInput(Word)
                 && !InputValidation.emptyInput(TashNoFrom) && !InputValidation.emptyInput(TashNoTo)
                 && !InputValidation.emptyInput(TashYearFrom) && !InputValidation.emptyInput(TashYearTo)
-                && !InputValidation.emptyInput(DateFrom) && !InputValidation.emptyInput(DateTo)
+                //&& !InputValidation.emptyInput(DateFrom) && !InputValidation.emptyInput(DateTo)
+                && DateFrom.getText().toString().equals("") && DateTo.getText().toString().equals("")
                 && getTypeIds(listOfType).trim().isEmpty()) {
             Toast.makeText(this, "No Data", Toast.LENGTH_SHORT).show();
+        } else if (getTypeIds(listOfIds).trim().isEmpty()) {
+            Toast.makeText(this, "قم باختيار التشريع", Toast.LENGTH_SHORT).show();
         } else {
             tashName = TashName.getText().toString();
             word = Word.getText().toString();
@@ -253,7 +378,27 @@ public class SearchTashActivity extends AppCompatActivity {
                 dateFrom = tashdate;
                 dateTo = tashdate;
             }
-            searchLocaleTash();
+
+            if (state.equals("OnLine")) {
+                mButtonState = true;
+                searchApi();
+                mProgress.show();
+
+            } else if (state.equals("OfLine")) {
+                mButtonState = false;
+                searchLocaleTash();
+            }
+
+
+//
+//            if (mButtonState) {
+//                searchApi();
+//                mProgress.show();
+//            } else {
+//                searchLocaleTash();
+//                mProgress.show();
+//            }
+//            searchLocaleTash();
             //getUserSearchInput();
         }
     }
@@ -295,15 +440,41 @@ public class SearchTashActivity extends AppCompatActivity {
             public void onItemClick(AdapterView parent, View view, int position, long id) {
                 //DialogSearchDataModel dataModel = dataModels.get(position);
                 DialogSearchDataModel dataModel = (DialogSearchDataModel) parent.getItemAtPosition(position);
+//                dataModel.checked = !dataModel.checked;
+//                adapter.notifyDataSetChanged();
+
                 dataModel.checked = !dataModel.checked;
                 adapter.notifyDataSetChanged();
 
+
                 if (dataModel.isChecked()) {
-                    listOfIds.add(dataModel.getId());
-                    listOfType.add(dataModel.getName());
+                    if (dataModel.getId().equals("1000")) {
+                        listOfIds.clear();
+                        listOfType.clear();
+                        for (DialogSearchDataModel model : dataModels) {
+                            model.setChecked(true);
+                            listOfIds.add(model.getId());
+                            listOfType.add(model.getName());
+                            adapter.notifyDataSetChanged();
+                        }
+                        listOfIds.remove(listOfIds.size() - 1);
+                    } else {
+                        listOfIds.add(dataModel.getId());
+                        listOfType.add(dataModel.getName());
+                    }
+
                 } else {
-                    listOfIds.remove(dataModel.getId());
-                    listOfType.remove(dataModel.getName());
+                    if (dataModel.getId().equals("1000")) {
+                        for (DialogSearchDataModel model : dataModels) {
+                            model.setChecked(false);
+                            listOfIds.remove(model.getId());
+                            listOfType.remove(model.getName());
+                            adapter.notifyDataSetChanged();
+                        }
+                    } else {
+                        listOfIds.remove(dataModel.getId());
+                        listOfType.remove(dataModel.getName());
+                    }
                 }
 
                 Toast.makeText(SearchTashActivity.this, getTypeIds(listOfIds), Toast.LENGTH_SHORT).show();
@@ -371,7 +542,7 @@ public class SearchTashActivity extends AppCompatActivity {
         return builder.toString();
     }
 
-    @OnClick(R.id.F_Type_ids)
+    @OnClick(R.id.Type_ids)
     public void onTypeIDViewClicked() {
         showExpensesDialog();
     }
@@ -415,5 +586,4 @@ public class SearchTashActivity extends AppCompatActivity {
         Util.setViewsTypeface(this, DateTo);
         Util.setViewsTypeface(this, BTNSearchTash);
     }
-
 }

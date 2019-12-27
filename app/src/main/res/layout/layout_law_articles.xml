@@ -45,6 +45,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/TV_back"
                 style="@style/txt_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
