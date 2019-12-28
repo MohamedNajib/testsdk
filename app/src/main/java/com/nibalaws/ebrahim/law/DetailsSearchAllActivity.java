@@ -133,9 +133,7 @@ public class DetailsSearchAllActivity extends AppCompatActivity {
                 Util.SelectionSearchWord(searchText, searchText, txt);
                 break;
             case R.id.bt_show:
-                Intent intent = new Intent(DetailsSearchAllActivity.this, WebViewActivity.class);
-                intent.putExtra("stringURL", stringURL);
-                startActivity(intent);
+                Util.openWebsiteUrl(this, stringURL, WebViewActivity.class);
                 break;
         }
     }

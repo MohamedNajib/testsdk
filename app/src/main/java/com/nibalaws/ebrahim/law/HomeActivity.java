@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.balsikandar.crashreporter.CrashReporter;
 import com.bigkoo.svprogresshud.SVProgressHUD;
+import com.nibalaws.ebrahim.GetDataBaseLastUpdate;
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.Qiod.ListQioad;
 import com.nibalaws.ebrahim.law.Qiod.ListQioadpdf;
@@ -232,7 +233,7 @@ public class HomeActivity extends AppCompatActivity implements TextWatcher {
         }
     }
 
-    @OnClick({R.id.settingsIcon, R.id.favouret, R.id.contactUs, R.id.Notifications})
+    @OnClick({R.id.settingsIcon, R.id.favouret, R.id.contactUs, R.id.Notifications, R.id.update})
     public void onViewTobIconClicked(View view) {
         switch (view.getId()) {
             case R.id.settingsIcon:
@@ -247,6 +248,9 @@ public class HomeActivity extends AppCompatActivity implements TextWatcher {
                 break;
             case R.id.Notifications:
                 openActivity(GetNotificationsActivity.class);
+                break;
+            case R.id.update:
+                openActivity(GetDataBaseLastUpdate.class);
                 break;
         }
     }

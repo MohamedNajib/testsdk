@@ -143,7 +143,7 @@ public class SearchAllActivity extends AppCompatActivity {
         }
     }
 
-       @OnClick({R.id.homeclick, R.id.backclik})
+    @OnClick({R.id.homeclick, R.id.backclik})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.homeclick:

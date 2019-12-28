@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -17,8 +18,11 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.nibalaws.ebrahim.law.ApiCall;
 import com.nibalaws.ebrahim.law.HomeActivity;
 import com.nibalaws.ebrahim.law.R;
+import com.nibalaws.ebrahim.law.rest.SharedPrefManagerStorage;
 
 import java.util.Locale;
 
@@ -112,4 +116,43 @@ public class Util {
         sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
         context.startActivity(Intent.createChooser(sharingIntent, context.getResources().getString(R.string.app_name)));
     }
+
+    public static boolean isInternetConnection(Context context) {
+        ConnectivityManager connectivityManager =
+                ((ConnectivityManager) context.getSystemService(context.CONNECTIVITY_SERVICE));
+        return connectivityManager.getActiveNetworkInfo() != null
+                && connectivityManager.getActiveNetworkInfo().isConnected();
+    }
+
+    public static boolean checkNetworkAvailable(Context context) {
+        if (isInternetConnection(context)) {
+            return true;
+        } else {
+            showWarrning(context, "تاكد من اتصالك بالانترنت");
+            return false;
+        }
+    }
+
+    public static void openWebsiteUrl(Context context, String url, Class<?> cls) {
+        if (checkNetworkAvailable(context)) {
+            if (SharedPrefManagerStorage.getInstance(context).getClientApiToken() != null) {
+                setIntentWithExtra(context, url, cls);
+            } else {
+                ApiCall.addDeviceCall(context, "1", FirebaseInstanceId.getInstance().getToken(), "1");
+                SharedPrefManagerStorage.getInstance(context)
+                        .setClientApiToken(FirebaseInstanceId.getInstance().getToken());
+            }
+        } else {
+            ApiCall.addDeviceCall(context, "1", FirebaseInstanceId.getInstance().getToken(), "1");
+            SharedPrefManagerStorage.getInstance(context)
+                    .setClientApiToken(FirebaseInstanceId.getInstance().getToken());
+        }
+    }
+
+    private static void setIntentWithExtra(Context context, String stringURL, Class<?> cls) {
+        Intent intent = new Intent(context, /*WebViewActivity*/cls);
+        intent.putExtra("stringURL", stringURL);
+        context.startActivity(intent);
+    }
+
 }

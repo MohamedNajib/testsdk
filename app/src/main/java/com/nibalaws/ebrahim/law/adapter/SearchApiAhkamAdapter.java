@@ -5,27 +5,33 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.nibalaws.ebrahim.law.R;
 import com.nibalaws.ebrahim.law.rest.apiModel.SearchAhkamResponse;
 import com.nibalaws.ebrahim.law.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SearchApiAhkamAdapter extends RecyclerView.Adapter<SearchApiAhkamAdapter.SearchApiAhkamHolder> {
+public class SearchApiAhkamAdapter extends RecyclerView.Adapter<SearchApiAhkamAdapter.SearchApiAhkamHolder>
+implements Filterable {
 
     private Context mContext;
     private List<SearchAhkamResponse> mSearchAhkamList;
+    private List<SearchAhkamResponse> mSearchAhkamListFull;
     private OnItemClick mOnItemClick;
 
     public SearchApiAhkamAdapter(Context mContext, List<SearchAhkamResponse> mSearchAhkamList, OnItemClick mOnItemClick) {
         this.mContext = mContext;
         this.mSearchAhkamList = mSearchAhkamList;
         this.mOnItemClick = mOnItemClick;
+        mSearchAhkamListFull = new ArrayList<>(mSearchAhkamList);
     }
 
     @Override
@@ -48,6 +54,41 @@ public class SearchApiAhkamAdapter extends RecyclerView.Adapter<SearchApiAhkamAd
     public int getItemCount() {
         return mSearchAhkamList.size();
     }
+
+    @Override
+    public Filter getFilter() {
+        return exampleFilter;
+    }
+
+    private Filter exampleFilter = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<SearchAhkamResponse> filteredList = new ArrayList<>();
+            if (charSequence == null || charSequence.length() == 0) {
+                filteredList.addAll(mSearchAhkamListFull);
+            } else {
+                String filterPattern = charSequence.toString().toLowerCase().trim();
+
+                for (SearchAhkamResponse item : mSearchAhkamListFull) {
+                    if (item.getInfo().toLowerCase().contains(filterPattern)) {
+                        filteredList.add(item);
+                    }
+                }
+            }
+
+            FilterResults results = new FilterResults();
+            results.values = filteredList;
+
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+            mSearchAhkamList.clear();
+            mSearchAhkamList.addAll((List) filterResults.values);
+            notifyDataSetChanged();
+        }
+    };
 
     public class SearchApiAhkamHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 

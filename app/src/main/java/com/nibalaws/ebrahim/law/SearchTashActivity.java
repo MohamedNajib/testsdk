@@ -20,8 +20,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +52,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class SearchTashActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class SearchTashActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener
+        , SearchView.OnQueryTextListener {
 
     @BindView(R.id.localeRV)
     RecyclerView localeRV;
@@ -94,6 +97,10 @@ public class SearchTashActivity extends AppCompatActivity implements DatePickerD
     TextView TypeIds;
     @BindView(R.id.ttt)
     TextView ttt;
+    @BindView(R.id.search_view)
+    SearchView searchView;
+    @BindView(R.id.layoutRV)
+    LinearLayout layoutRV;
 
 
     private DatabaseHelper databaseHelper;
@@ -139,7 +146,7 @@ public class SearchTashActivity extends AppCompatActivity implements DatePickerD
         setContentView(R.layout.activity_search_tash);
         ButterKnife.bind(this);
         scrollView3.setVisibility(View.VISIBLE);
-        localeRV.setVisibility(View.GONE);
+        layoutRV.setVisibility(View.GONE);
         mProgress = new SVProgressHUD(this);
         mSearchTashList = new ArrayList<>();
 
@@ -161,6 +168,7 @@ public class SearchTashActivity extends AppCompatActivity implements DatePickerD
         dataModels.add(new DialogSearchDataModel("اختيار الكل", "1000", false));
 
         master_stracts = new ArrayList<>();
+        searchView.setOnQueryTextListener(this);
     }
 
     @Override
@@ -169,7 +177,7 @@ public class SearchTashActivity extends AppCompatActivity implements DatePickerD
         if (backState == 1) {
             backState = 0;
             scrollView3.setVisibility(View.VISIBLE);
-            localeRV.setVisibility(View.GONE);
+            layoutRV.setVisibility(View.GONE);
             txtTitel.setText("بحث مخصص");
         } else {
             super.onBackPressed();
@@ -180,7 +188,7 @@ public class SearchTashActivity extends AppCompatActivity implements DatePickerD
                             String dateTo, String typeIds, String word, String searchType, String tashName, final int page) {
 
         scrollView3.setVisibility(View.GONE);
-        localeRV.setVisibility(View.VISIBLE);
+        layoutRV.setVisibility(View.VISIBLE);
         backState = 1;
         APIManager.getApis().SearchTash(tashNoFrom, tashNoTo, tashYearFrom, tashYearTo,
                 dateFrom, dateTo, typeIds, word, searchType, tashName, page)
@@ -253,6 +261,22 @@ public class SearchTashActivity extends AppCompatActivity implements DatePickerD
         datePickerDialog.show();
     }
 
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        if (state.equals("OnLine")) {
+            searchApiTashAdapter.getFilter().filter(s);
+
+        } else if (state.equals("OfLine")) {
+            searchTashAdapter.getFilter().filter(s);
+        }
+        return false;
+    }
+
 
     private class SeachLoacalTask extends AsyncTask<Void, Void, String> {
         protected String doInBackground(Void... params) {
@@ -284,7 +308,7 @@ public class SearchTashActivity extends AppCompatActivity implements DatePickerD
                 txtTitel.setText("نتيجة البحث");
 
                 scrollView3.setVisibility(View.GONE);
-                localeRV.setVisibility(View.VISIBLE);
+                layoutRV.setVisibility(View.VISIBLE);
 
                 Toast.makeText(SearchTashActivity.this, tashName, Toast.LENGTH_SHORT).show();
                 searchTashAdapter = new SearchLocaleTashAdapter(SearchTashActivity.this,
@@ -559,7 +583,7 @@ public class SearchTashActivity extends AppCompatActivity implements DatePickerD
                 } else if (backState == 1) {
                     backState = 0;
                     scrollView3.setVisibility(View.VISIBLE);
-                    localeRV.setVisibility(View.GONE);
+                    layoutRV.setVisibility(View.GONE);
                     txtTitel.setText("بحث مخصص");
                 }
                 break;

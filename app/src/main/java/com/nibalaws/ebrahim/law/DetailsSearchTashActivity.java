@@ -148,9 +148,7 @@ public class DetailsSearchTashActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.bt_show:
-                Intent intent = new Intent(DetailsSearchTashActivity.this, WebViewActivity.class);
-                intent.putExtra("stringURL", stringURL);
-                startActivity(intent);
+                Util.openWebsiteUrl(this, stringURL, WebViewActivity.class);
                 break;
         }
     }

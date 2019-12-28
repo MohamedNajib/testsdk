@@ -118,12 +118,7 @@ public class DetailsSearchNiabhActivity extends AppCompatActivity {
                 break;
 
             case R.id.bt_show:
-                ProgressUtil progressUtil = new ProgressUtil(this);
-                progressUtil.showProgress();
-                Intent intent = new Intent(this, WebViewActivity.class);
-                intent.putExtra("stringURL", URL);
-                startActivity(intent);
-                progressUtil.dismissProgress();
+                Util.openWebsiteUrl(this, URL, WebViewActivity.class);
                 break;
         }
     }

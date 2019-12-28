@@ -13,6 +13,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.nibalaws.ebrahim.GetDataBaseLastUpdate;
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.notification.ConnectionUtilities;
 import com.nibalaws.ebrahim.law.rest.SharedPrefManagerStorage;
@@ -105,6 +106,7 @@ public class Splash_Screen extends AppCompatActivity {
             //Intent intent = new Intent(getApplicationContext(), GetNotificationsActivity.class);
             //Intent intent = new Intent(getApplicationContext(), SearchTashActivity.class);
             Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+//            Intent intent = new Intent(getApplicationContext(), GetDataBaseLastUpdate.class);
             //Intent intent = new Intent(getApplicationContext(), SearchHithiatActivity/*SearchnibaActivity*/.class);
             //Intent intent = new Intent(getApplicationContext(), textViewMowad.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);

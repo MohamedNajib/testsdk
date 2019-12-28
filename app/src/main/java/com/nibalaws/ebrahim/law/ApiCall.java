@@ -4,6 +4,7 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
+import com.nibalaws.ebrahim.GetDataBaseLastUpdate;
 import com.nibalaws.ebrahim.law.rest.APIManager;
 import com.nibalaws.ebrahim.law.rest.apiModel.Search;
 import com.nibalaws.ebrahim.law.rest.apiModel.SearchResponse;
@@ -77,7 +78,10 @@ public class ApiCall {
                 });
     }
 
-    public static void getDataBaseLastUpdateCall(final Context context, String Type_id) {
+    public static List<Search> searchesList;
+    public static void getDataBaseLastUpdateCall(final Context context, String Type_id, final SVProgressHUD mProgress) {
+        searchesList = new ArrayList<>();
+
         APIManager.getApis().GetDataBaseLastUpdate(Type_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -89,14 +93,14 @@ public class ApiCall {
 
                     @Override
                     public void onSuccess(List<Search> searchnibaResponses) {
-                        for (int i = 0; i < searchnibaResponses.size(); i++) {
-//                            ((HomeActivity)context).tv.append(searchnibaResponses.get(i).getInfo());
-//                            ((HomeActivity)context).tv.append("\n");
-                        }
+                        mProgress.dismiss();
+                        searchesList.addAll(searchnibaResponses);
+                        ((GetDataBaseLastUpdate) context).initReccyclerView(searchesList);
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        mProgress.dismiss();
                         Toast.makeText(context, "Oops Error: \n"
                                 + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                     }

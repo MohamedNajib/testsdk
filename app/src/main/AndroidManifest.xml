@@ -35,7 +35,8 @@
         android:testOnly="false"
         android:theme="@style/MyMaterialTheme.Base"
         tools:ignore="HardcodedDebugMode">
-        <activity android:name=".WebViewActivity"></activity>
+        <activity android:name="com.nibalaws.ebrahim.GetDataBaseLastUpdate"></activity>
+        <activity android:name=".WebViewActivity" />
         <activity android:name=".DetailsSearchNiabhActivity" />
         <activity android:name=".SearchnibaActivity" />
         <activity android:name=".SearchHithiatActivity" />

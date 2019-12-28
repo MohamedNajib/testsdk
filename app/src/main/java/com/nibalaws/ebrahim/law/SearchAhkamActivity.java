@@ -21,8 +21,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +52,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class SearchAhkamActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
+public class SearchAhkamActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener
+        , SearchView.OnQueryTextListener {
 
     @BindView(R.id.localeAhkamRV)
     RecyclerView localeAhkamRV;
@@ -122,6 +125,10 @@ public class SearchAhkamActivity extends AppCompatActivity implements DatePicker
     EditText CourtSys;
     @BindView(R.id.court_place)
     EditText CourtPlace;
+    @BindView(R.id.layoutRV)
+    LinearLayout layoutRV;
+    @BindView(R.id.search_view)
+    SearchView searchView;
 
 
     private ArrayList<DialogSearchDataModel> dataModels;
@@ -155,7 +162,7 @@ public class SearchAhkamActivity extends AppCompatActivity implements DatePicker
         setContentView(R.layout.activity_search_ahkam);
         ButterKnife.bind(this);
         ScrollViewAhkam.setVisibility(View.VISIBLE);
-        localeAhkamRV.setVisibility(View.GONE);
+        layoutRV.setVisibility(View.GONE);
         txtTitel.setText("بحث مخصص");
 
         state = getIntent().getStringExtra("state");
@@ -177,6 +184,8 @@ public class SearchAhkamActivity extends AppCompatActivity implements DatePicker
         listOfType = new ArrayList<>();
         dataModels = databaseHelper.gettypeDialogSearchAhkam();
         dataModels.add(new DialogSearchDataModel("اختيار الكل", "1000", false));
+
+        searchView.setOnQueryTextListener(this);
     }
 
     @OnClick({R.id.date_from, R.id.date_To})
@@ -206,7 +215,7 @@ public class SearchAhkamActivity extends AppCompatActivity implements DatePicker
         if (backState == 1) {
             backState = 0;
             ScrollViewAhkam.setVisibility(View.VISIBLE);
-            localeAhkamRV.setVisibility(View.GONE);
+            layoutRV.setVisibility(View.GONE);
             txtTitel.setText("بحث مخصص");
         } else {
             super.onBackPressed();
@@ -221,7 +230,7 @@ public class SearchAhkamActivity extends AppCompatActivity implements DatePicker
 
         backState = 1;
         ScrollViewAhkam.setVisibility(View.GONE);
-        localeAhkamRV.setVisibility(View.VISIBLE);
+        layoutRV.setVisibility(View.VISIBLE);
 
         APIManager.getApis().SearchAhkam(Hkm_num_From, Hkm_num_To, Office_from, office_To, Page_FROM, Page_to, Part_FROM,
                 Part_to, court_sys, court_place, Type_ids, date_from, date_to, Word,
@@ -253,6 +262,8 @@ public class SearchAhkamActivity extends AppCompatActivity implements DatePicker
                         });
 
                         localeAhkamRV.setAdapter(mSearchApiAhkamAdapter);
+
+
                     }
 
                     @Override
@@ -271,7 +282,7 @@ public class SearchAhkamActivity extends AppCompatActivity implements DatePicker
     private void localeSearch() {
         backState = 1;
         ScrollViewAhkam.setVisibility(View.GONE);
-        localeAhkamRV.setVisibility(View.VISIBLE);
+        layoutRV.setVisibility(View.VISIBLE);
         txtTitel.setText("نتيجة البحث");
 
         master_stracts = databaseHelper.SearchAhkam(word, hkmNumFrom, hkmNumTo, hkmYearFrom, hkmYearTo,
@@ -291,6 +302,7 @@ public class SearchAhkamActivity extends AppCompatActivity implements DatePicker
         });
         localeAhkamRV.setAdapter(searchTashAdapter);
         mProgress.dismiss();
+        searchView.setOnQueryTextListener(this);
     }
 
     private void apiSearch() {
@@ -468,30 +480,30 @@ public class SearchAhkamActivity extends AppCompatActivity implements DatePicker
 
 
                 if (dataModel.isChecked()) {
-                    if (dataModel.getId().equals("1000")){
+                    if (dataModel.getId().equals("1000")) {
                         listOfIds.clear();
                         listOfType.clear();
-                        for (DialogSearchDataModel model : dataModels){
+                        for (DialogSearchDataModel model : dataModels) {
                             model.setChecked(true);
                             listOfIds.add(model.getId());
                             listOfType.add(model.getName());
                             adapter.notifyDataSetChanged();
                         }
                         listOfIds.remove(listOfIds.size() - 1);
-                    }else {
+                    } else {
                         listOfIds.add(dataModel.getId());
                         listOfType.add(dataModel.getName());
                     }
 
                 } else {
-                    if (dataModel.getId().equals("1000")){
-                        for (DialogSearchDataModel model : dataModels){
+                    if (dataModel.getId().equals("1000")) {
+                        for (DialogSearchDataModel model : dataModels) {
                             model.setChecked(false);
                             listOfIds.remove(model.getId());
                             listOfType.remove(model.getName());
                             adapter.notifyDataSetChanged();
                         }
-                    }else {
+                    } else {
                         listOfIds.remove(dataModel.getId());
                         listOfType.remove(dataModel.getName());
                     }
@@ -583,7 +595,7 @@ public class SearchAhkamActivity extends AppCompatActivity implements DatePicker
                 } else if (backState == 1) {
                     backState = 0;
                     ScrollViewAhkam.setVisibility(View.VISIBLE);
-                    localeAhkamRV.setVisibility(View.GONE);
+                    layoutRV.setVisibility(View.GONE);
                     txtTitel.setText("بحث مخصص");
                 }
                 break;
@@ -651,12 +663,30 @@ public class SearchAhkamActivity extends AppCompatActivity implements DatePicker
 
     @Override
     public void onDateSet(DatePicker datePicker, int year, int month, int dayOfMonth) {
-        if (date){
+        if (date) {
             dateFrom = month + "/" + dayOfMonth + "/" + year;
             DateFrom.setText(dateFrom);
-        }else {
+        } else {
             dateTo = month + "/" + dayOfMonth + "/" + year;
             DateTo.setText(dateTo);
         }
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+
+        if (state.equals("OnLine")) {
+            mSearchApiAhkamAdapter.getFilter().filter(s);
+
+        } else if (state.equals("OfLine")) {
+            searchTashAdapter.getFilter().filter(s);
+        }
+
+        return false;
     }
 }
