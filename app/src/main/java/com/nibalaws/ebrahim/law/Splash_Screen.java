@@ -13,7 +13,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.nibalaws.ebrahim.GetDataBaseLastUpdate;
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.notification.ConnectionUtilities;
 import com.nibalaws.ebrahim.law.rest.SharedPrefManagerStorage;

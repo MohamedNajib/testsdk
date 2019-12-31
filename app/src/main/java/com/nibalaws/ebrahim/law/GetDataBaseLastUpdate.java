@@ -1,4 +1,4 @@
-package com.nibalaws.ebrahim;
+package com.nibalaws.ebrahim.law;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

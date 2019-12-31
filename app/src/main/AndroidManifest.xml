@@ -21,7 +21,6 @@
         android:value="@string/default_notification_channel_id" />
 
     <application
-        android:name=".App"
         android:allowBackup="true"
         android:debuggable="false"
         android:hardwareAccelerated="false"
@@ -35,7 +34,7 @@
         android:testOnly="false"
         android:theme="@style/MyMaterialTheme.Base"
         tools:ignore="HardcodedDebugMode">
-        <activity android:name="com.nibalaws.ebrahim.GetDataBaseLastUpdate"></activity>
+        <activity android:name=".GetDataBaseLastUpdate"></activity>
         <activity android:name=".WebViewActivity" />
         <activity android:name=".DetailsSearchNiabhActivity" />
         <activity android:name=".SearchnibaActivity" />
@@ -82,7 +81,6 @@
         <activity android:name=".ahkam.textViewahkam" />
         <activity android:name=".notification.Show_massege" />
         <activity android:name=".Qiod.textView" />
-        <activity android:name=".Ssssss" />
         <activity android:name=".DetailsSearchAhkamActivity" />
         <activity android:name=".DetailsSearchAllActivity" />
 

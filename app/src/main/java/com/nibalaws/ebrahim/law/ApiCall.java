@@ -4,7 +4,6 @@ import android.content.Context;
 import android.widget.Toast;
 
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.nibalaws.ebrahim.GetDataBaseLastUpdate;
 import com.nibalaws.ebrahim.law.rest.APIManager;
 import com.nibalaws.ebrahim.law.rest.apiModel.Search;
 import com.nibalaws.ebrahim.law.rest.apiModel.SearchResponse;

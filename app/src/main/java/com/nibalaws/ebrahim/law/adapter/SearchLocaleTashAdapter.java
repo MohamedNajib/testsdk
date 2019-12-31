@@ -71,7 +71,7 @@ public class SearchLocaleTashAdapter extends RecyclerView.Adapter<SearchLocaleTa
                 String filterPattern = charSequence.toString().toLowerCase().trim();
 
                 for (Master_Stract item : mMasterStractsFull) {
-                    if (item.getItem1().toLowerCase().contains(filterPattern)) {
+                    if (item.getItem2().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }

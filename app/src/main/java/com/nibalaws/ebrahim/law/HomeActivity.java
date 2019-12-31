@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.balsikandar.crashreporter.CrashReporter;
 import com.bigkoo.svprogresshud.SVProgressHUD;
-import com.nibalaws.ebrahim.GetDataBaseLastUpdate;
 import com.nibalaws.ebrahim.law.DataBaseManger.DatabaseHelper;
 import com.nibalaws.ebrahim.law.Qiod.ListQioad;
 import com.nibalaws.ebrahim.law.Qiod.ListQioadpdf;
